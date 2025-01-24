@@ -26,7 +26,6 @@ public class InputManager : MonoBehaviour
         if (!context.performed) return;
         
         string key = context.control.name;
-        
         if (hotbarSlots.TryGetValue(key, out GameObject button)) button.GetComponent<HotbarSlot>().OnSlotClicked();
     }
 }

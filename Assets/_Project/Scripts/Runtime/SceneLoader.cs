@@ -32,6 +32,11 @@ namespace NoSlimes
         {
             loadingScreen = GetComponentInChildren<LoadingScreen>();
             cancellationToken = destroyCancellationToken;
+
+            if(SceneManager.GetActiveScene().buildIndex == (int)SceneIndexes.MANAGER)
+            {
+                LoadScene((int)SceneIndexes.MAIN_MENU);
+            }
         }
 
         public async void LoadScene(int sceneBuildIndex, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
@@ -39,7 +44,7 @@ namespace NoSlimes
             await LoadSceneAsync(sceneBuildIndex, loadSceneMode);
         }
 
-        private async Task LoadSceneAsync(int sceneBuildIndex, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        private async Awaitable LoadSceneAsync(int sceneBuildIndex, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if(isLoading)
                 return;
@@ -48,6 +53,8 @@ namespace NoSlimes
 
             loadingScreen.Show();
             loadingScreen.SetProgress(0);
+
+            await Awaitable.NextFrameAsync();
 
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneBuildIndex, loadSceneMode);
             if (loadOperation != null)
@@ -68,8 +75,9 @@ namespace NoSlimes
                 }
             }
 
-            loadingScreen.Hide();
+            await Awaitable.NextFrameAsync();
 
+            loadingScreen.Hide();
             isLoading = false;
         }
     }

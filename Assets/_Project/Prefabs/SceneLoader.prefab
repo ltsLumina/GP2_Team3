@@ -684,7 +684,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!114 &2844620525701281094
 MonoBehaviour:
@@ -738,8 +738,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f8c36c873e9217438d5467ad4de36ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingBar: {fileID: 0}
-  loadingIcon: {fileID: 0}
+  screen: {fileID: 6368448761617994268}
+  loadingBar: {fileID: 2815367713390887373}
+  loadingIcon: {fileID: 8490915028355206124}
   iconSpinSpeed: 2.3
-  tipText: {fileID: 0}
-  tips: {fileID: 0}
+  tipText: {fileID: 8160508601149086510}
+  tips: {fileID: 11400000, guid: d2e3b47b76942bb4d9334d895775c62c, type: 2}

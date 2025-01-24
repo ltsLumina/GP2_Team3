@@ -17,7 +17,11 @@ public class PlayingState : State
         if (Input.GetKeyDown(KeyCode.Escape))
             GameManager.Instance.SwitchState<PauseState>();
         
+        // this should probably run in the players update loop but it's here for now
         alphaModulator.RunAlphaModulation();
+
+        EnemyManager.Instance.UpdateEnemyManager();
+        InventorySystem.Instance.UpdateInventorySystem();
     }
     
     public override void ExitState()

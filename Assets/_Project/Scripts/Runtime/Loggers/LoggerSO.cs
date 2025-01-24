@@ -29,6 +29,15 @@ namespace NoSlimes.Loggers
             }
         }
 
+        public void LogError(object message, Object sender)
+        {
+            if (enableLogging)
+            {
+                message = ConstructMessage(message);
+                Debug.LogError(message, sender);
+            }
+        }
+
         private string ConstructMessage(object message)
         {
             string colorHex = ColorUtility.ToHtmlStringRGB(prefixColor);

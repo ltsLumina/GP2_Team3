@@ -9,6 +9,11 @@ public static class SettingsManager
 
     private static Dictionary<string, string> _settings;
 
+    static SettingsManager()
+    {
+        LoadSettings();
+    }
+
     public static T GetSetting<T>(string key)
     {
         if (_settings == null) LoadSettings();

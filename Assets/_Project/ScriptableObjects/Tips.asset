@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa679f4fcf959944bace7c04c0b1403, type: 3}
   m_Name: Tips
   m_EditorClassIdentifier: 
-  gameTips: []
+  gameTips:
+  - Hi ;)
+  - This is tip (don't ask me why it exists, I just ported this from my previous
+    project)

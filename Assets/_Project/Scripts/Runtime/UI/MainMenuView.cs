@@ -1,3 +1,4 @@
+using NoSlimes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ public class MainMenuView : MenuView
     private void Play()
     {
         Logger.Log("Play", this);
+
+        SceneLoader.Instance.LoadScene((int)SceneIndexes.GAME);
     }
 
     private void Settings()

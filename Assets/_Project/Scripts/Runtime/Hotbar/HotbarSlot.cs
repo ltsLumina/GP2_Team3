@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using DG.Tweening;
 using Lumina.Essentials.Attributes;
 using UnityEditor.SceneManagement;
@@ -76,30 +77,33 @@ public class HotbarSlot : MonoBehaviour
         var button = GetComponent<Button>();
         button.onClick.AddListener(OnSlotClicked);
     }
+    
+    bool pointerOverUI; // unity sucks balls
+
+    void Update() // unity sucks balls
+    {
+        if (!Application.isPlaying) return;
+        pointerOverUI = EventSystem.current.IsPointerOverGameObject(); // unity sucks balls
+    }
 
     Coroutine cooldown;
-    
+
     public void OnSlotClicked()
     {
-        if (!ability) return;
+        if (!ability || cooldown != null) return;
 
-        if (!ability.IsMenu)
+        // If the ability is a menu, use a different cooldown method.
+        if (ability.IsMenu) cooldown = StartCoroutine(MenuCooldown());
+        else
         {
-            if (ability.IsMouse && EventSystem.current.IsPointerOverGameObject())
+            // If the ability is a mouse ability (left/right click) and the cursor is over a UI element, do not use the ability.
+            if (ability.IsMouse && pointerOverUI)
             {
-                Debug.Log("Cursor is over a UI element. Ability cannot be used.");
+                if (log) Debug.Log("Cursor is over a UI element. Ability cannot be used.");
                 return;
             }
             
-            if (cooldown != null) return;
-        
             cooldown = StartCoroutine(Cooldown());
-        }
-        else
-        {
-            if (cooldown != null) return;
-        
-            cooldown = StartCoroutine(MenuCooldown());
         }
     }
 

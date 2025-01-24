@@ -1,3 +1,4 @@
+using DG.Tweening;
 using NoSlimes.Loggers;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,18 +10,16 @@ public abstract class MenuView : LoggerMonoBehaviour
     public UnityEvent onHideMenu;
 
     public abstract void Initialize();
-    
+
     public virtual void Show()
     {
         onShowMenu?.Invoke();
-
         gameObject.SetActive(true);
     }
 
     public virtual void Hide()
     {
         onHideMenu?.Invoke();
-
         gameObject.SetActive(false);
     }
 }

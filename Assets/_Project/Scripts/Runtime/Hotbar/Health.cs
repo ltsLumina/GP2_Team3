@@ -1,17 +1,26 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Health : MonoBehaviour
+public interface IDamageable
 {
-    [SerializeField, Range(0,100)] float health = 100f;
+    float CurrentHealth { get; set; }
+    float MaxHealth { get; set; }
+    
+    void TakeDamage(int damage);
+
+    event Action OnDeath;
+}
+
+public class Health : MonoBehaviour, IDamageable
+{
+    [SerializeField] float health = 100f;
     [SerializeField] float maxHealth = 100f;
 
     public Material Material => GetComponent<Image>().material;
-    
-    void Awake() => Material.SetFloat("_ResourceAmount", maxHealth);
 
+    public event Action OnDeath;
+    
     public float CurrentHealth
     {
         get
@@ -25,6 +34,7 @@ public class Health : MonoBehaviour
             {
                 health = 0;
                 Debug.LogWarning("Dead!");
+                OnDeath?.Invoke();
             }
             else
             {
@@ -34,45 +44,35 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage)
+    public float MaxHealth
+    {
+        get => maxHealth;
+        set => maxHealth = value;
+    }
+
+    void Awake()
+    {
+        health = maxHealth;
+        Material.SetFloat("_ResourceAmount", maxHealth);
+        
+        // ensure there is only every one instance of the health component
+        if (FindObjectsByType<Health>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length > 1) 
+            Debug.LogError("There should only be one instance of the Health component in the scene! \nIt should be on the Health canvas object ONLY.", this);
+    }
+
+    Player player;
+
+    void Start() => player = FindAnyObjectByType<Player>();
+
+    public void TakeDamage(int damage)
     {
         health -= damage;
-        Debug.Log($"Took {damage} damage! ({CurrentHealth} health remaining)");
+        Debug.Log($"{player.name} took {damage} damage! ({CurrentHealth} health remaining)");
     }
 
     public void Heal(int amount)
     {
         health += amount;
         Debug.Log($"Healed {amount}! ({CurrentHealth} health remaining)");
-    }
-}
-
-// custom editor
-[CustomEditor(typeof(Health))]
-public class HealthEditor : Editor
-{
-    SerializedProperty health;
-    SerializedProperty maxHealth;
-
-    void Awake()
-    {
-        health = serializedObject.FindProperty("health");
-        maxHealth = serializedObject.FindProperty("maxHealth");
-    }
-
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-        
-        // slider for health
-        EditorGUILayout.Slider(health, 0, maxHealth.floatValue, new GUIContent("Health"));
-        EditorGUILayout.PropertyField(maxHealth);
-
-        if (serializedObject.ApplyModifiedProperties())
-        {
-            var healthComponent = (Health)target;
-            healthComponent.Material.SetFloat("_ResourceAmount", health.floatValue / maxHealth.floatValue);
-            
-        }
     }
 }
