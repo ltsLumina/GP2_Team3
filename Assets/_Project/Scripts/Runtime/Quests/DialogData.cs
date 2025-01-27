@@ -25,4 +25,23 @@ public class DialogData
     public FontStyles FontStyle => fontStyle;
     public TextAlignmentOptions TextAlignment => textAlignment;
     public float FontSize => Mathf.Abs(fontSize);
+
+    public DialogData(string title, string content, DialogType dialogType)
+    {
+        this.title = title;
+        this.content = content;
+        this.dialogType = dialogType;
+        this.textColor = Color.white;
+        this.fontStyle = FontStyles.Normal;
+        this.textAlignment = TextAlignmentOptions.Midline;
+    }
+
+    public DialogData(string title, string content, DialogType dialogType, TMP_FontAsset font, Color textColor, FontStyles fontStyle, TextAlignmentOptions textAlignment, float fontSize) : this(title, content, dialogType)
+    {
+        this.font = font;
+        this.textColor = textColor;
+        this.fontStyle = fontStyle;
+        this.textAlignment = textAlignment;
+        this.fontSize = fontSize;
+    }
 }

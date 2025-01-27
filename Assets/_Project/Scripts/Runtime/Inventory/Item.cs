@@ -1,20 +1,50 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Item : MonoBehaviour, IInteractable
 {
-    public MonoBehaviour MonoBehaviour { get; }
-
-    private TextMeshPro textMesh;
-    private BoxCollider boxCollider;
-
-    private void Start()
+    TextMeshPro textMesh;
+    BoxCollider boxCollider;
+    
+    void Initialize(string itemName)
     {
-        textMesh = GetComponent<TextMeshPro>();
+        var canvas = GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.WorldSpace;
+        canvas.worldCamera = Camera.main;
+
+        var itemText = GetComponent<TextMeshPro>();
+        itemText.autoSizeTextContainer = true;
+        itemText.text = $"<mark=#000000>{itemName}</mark>";
+        itemText.fontSize = 4f;
+        itemText.alignment = TextAlignmentOptions.Center;
+        itemText.textWrappingMode = TextWrappingModes.NoWrap;
+
+        switch (rarity)
+        {
+            case ItemManager.ItemRarity.Common:
+                itemText.color = Color.white; break;
+            
+            case ItemManager.ItemRarity.Uncommon:
+                itemText.color = Color.green; break;
+
+            case ItemManager.ItemRarity.Rare:
+                itemText.color = Color.blue; break;
+
+            case ItemManager.ItemRarity.Epic:
+                itemText.color = Color.yellow; break;
+
+            case ItemManager.ItemRarity.Legendary:
+                itemText.color = Color.red; break;
+        }
+
+        itemText.ForceMeshUpdate();
+
         boxCollider = GetComponent<BoxCollider>();
+        boxCollider.isTrigger = true;
+        boxCollider.size = itemText.textBounds.size + new Vector3(0, 0, 0.1f);
     }
 
     public void OnInteract()
@@ -63,6 +93,8 @@ public class Item : MonoBehaviour, IInteractable
         
         RollItemRarity();
         RollAttributes();
+
+        Initialize(itemName);
     }
     // we should never fill out a whole Int64 with IDs
     // assuming each item created increase this ID by 1

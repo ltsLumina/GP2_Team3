@@ -15,7 +15,9 @@ public abstract class Ability : ScriptableObject
 
     public bool IsMenu => GetType().Name.Contains("Menu");
     public bool IsMouse => GetType().Name.Contains("Click");
-    
+
+    public Player Player => FindAnyObjectByType<Player>();
+
     public abstract void Use();
 
     void Awake()

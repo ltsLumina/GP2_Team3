@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour, IDamageable
         Weak,
         Normal,
         Strong,
+        DEBUG,
     }
 
     [Header("Enemy")]
@@ -31,7 +32,8 @@ public class Enemy : MonoBehaviour, IDamageable
         get => currentHealth;
         set
         {
-            currentHealth = Mathf.Clamp(value, 0, maxHealth);
+            float variance = Random.Range(0.95f, 1.05f);
+            currentHealth = Mathf.Clamp(value * variance, 0, maxHealth);
             if (currentHealth <= 0)
             {
                 Debug.Log("Enemy died!");
@@ -44,10 +46,10 @@ public class Enemy : MonoBehaviour, IDamageable
         get => maxHealth;
         set => maxHealth = value;
     }
-
-#if UNITY_EDITOR // THIS IS A DEBUG BUTTON DO NOT ACTUALLY USE
+    
+    // THIS IS A DEBUG BUTTON DO NOT ACTUALLY USE
     [Button, UsedImplicitly]
-    void Kill()
+    void DEBUG_Kill()
     {
         var anim = GetComponentInChildren<Animator>();
         anim.enabled = false;
@@ -63,23 +65,27 @@ public class Enemy : MonoBehaviour, IDamageable
 
         enabled = false;
     }
-#endif
 
     void Awake()
     {
-        OnDeath += () => Destroy(gameObject);
+        OnDeath += () =>
+        {
+            DEBUG_Kill();
+            GetComponent<ItemDropper>().DropItem();
+        };
         
         currentHealth = maxHealth;
     }
 
     public void UpdateEnemy() { }
-    
+
     public void TakeDamage(int damage)
     {
         Debug.Log($"{gameObject.name} took {damage} damage!");
         
-        // Note: all damage has 5% +- variance. Does a few things to make the game feel more dynamic. If there are damage numbers, for instance, they won't always be the same.
-        CurrentHealth -= damage * Random.Range(0.95f, 1.05f);
+        // Note: all damage has 5% +- variance. Does a few things to make the game feel more dynamic. 
+            // If there are damage numbers, for instance, this would make them not all the same.
+        CurrentHealth -= damage;
     }
 }
 

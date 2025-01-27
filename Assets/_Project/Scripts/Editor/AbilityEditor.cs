@@ -52,6 +52,6 @@ public class AbilityEditor : Editor
         GUILayout.Label("", GUI.skin.horizontalSlider);
         GUILayout.Space(20);
         
-        DrawPropertiesExcluding(serializedObject, "m_Script", "abilityName", "icon", "cooldown");
+        base.OnInspectorGUI();
     }
 }

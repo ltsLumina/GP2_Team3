@@ -9,6 +9,7 @@ TagManager:
   - Environment
   - Item
   - Portal
+  - Bullet
   layers:
   - Default
   - TransparentFX

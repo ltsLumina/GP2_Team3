@@ -46,10 +46,7 @@ public class Player : MonoBehaviour, IDamageable
     
     public IReadOnlyDictionary<Stats, int> PlayerStats => playerStats; // changelog: changed from get-method to property (this comment can be removed after reading)
     
-    public void TakeDamage(int damage)
-    {
-        health.TakeDamage(damage);
-    }
+    public void TakeDamage(int damage) => health.TakeDamage(damage);
 
     void Start()
     {
@@ -65,8 +62,18 @@ public class Player : MonoBehaviour, IDamageable
         playerStats.Add(Stats.MovementSpeed, 100);
     }
 
+    /// <summary>
+    ///    Increase a stat by a certain percentage point value.
+    /// </summary>
+    /// <param name="stat"></param>
+    /// <param name="amount"> The percentage points to increase the stat by. </param>
     public void IncreaseStat(Stats stat, int amount) => playerStats[stat] += amount;
     
+    /// <summary>
+    ///   Decrease a stat by a certain percentage point value.
+    /// </summary>
+    /// <param name="stat"></param>
+    /// <param name="amount"> The percentage points to decrease the stat by. </param>
     public void DecreaseStat(Stats stat, int amount) => playerStats[stat] -= amount;
     
     public int GetStatValue(Stats stat) => playerStats[stat];

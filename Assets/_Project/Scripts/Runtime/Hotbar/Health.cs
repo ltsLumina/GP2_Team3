@@ -67,7 +67,7 @@ public class Health : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         health -= damage;
-        Debug.Log($"{player.name} took {damage} damage! ({CurrentHealth} health remaining)");
+        Debug.Log($"{player.name} took {damage} damage! ({CurrentHealth} health remaining)", this);
     }
 
     public void Heal(int amount)

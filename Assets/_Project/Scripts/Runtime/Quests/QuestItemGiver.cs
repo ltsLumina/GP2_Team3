@@ -2,11 +2,11 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Outline))]
-public class QuestItemGiver : MonoBehaviour, IInteractable
+public class QuestItemGiver : MonoBehaviour, IInteractable, IQuestItemGiver
 {
     [SerializeField] private QuestItemSO questItem;
 
-    public static event Action<QuestItemSO> OnQuestItemGiven;
+    public event Action<QuestItemSO> OnQuestItemGiven;
 
     private Outline outline;
 

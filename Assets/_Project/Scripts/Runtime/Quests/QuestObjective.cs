@@ -3,7 +3,7 @@
 [System.Serializable]
 public class QuestObjective
 {
-    [SerializeField] public string objectiveName;
+    [SerializeField] private string objectiveName;
     [SerializeField, TextArea(2, 3), Tooltip("\"<itemC>\" will display amount of items collected\n \"<itemT>\" will display total amount of items needed")]
     private string objectiveDescription;
 
@@ -13,6 +13,7 @@ public class QuestObjective
     private bool isComplete;
 
     public bool IsComplete => isComplete;
+    public string ObjectiveName => objectiveName;
     public string ObjectiveDescription
     {
         get

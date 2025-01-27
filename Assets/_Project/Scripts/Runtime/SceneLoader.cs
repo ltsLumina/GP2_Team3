@@ -1,11 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
+using NoSlimes.Loggers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace NoSlimes
 {
-    public class SceneLoader : Loggers.LoggerMonoBehaviour
+    public class SceneLoader : LoggerMonoBehaviour
     {
         public static SceneLoader Instance { get; private set; }
 
@@ -54,7 +55,7 @@ namespace NoSlimes
             loadingScreen.Show();
             loadingScreen.SetProgress(0);
 
-            await Awaitable.NextFrameAsync();
+            await Awaitable.NextFrameAsync(); // Note: has overload with cancellation support
 
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneBuildIndex, loadSceneMode);
             if (loadOperation != null)
@@ -75,7 +76,7 @@ namespace NoSlimes
                 }
             }
 
-            await Awaitable.NextFrameAsync();
+            await Awaitable.NextFrameAsync(); // Note: has overload with cancellation support
 
             loadingScreen.Hide();
             isLoading = false;

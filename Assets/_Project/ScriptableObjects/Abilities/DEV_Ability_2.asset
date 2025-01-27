@@ -15,3 +15,8 @@ MonoBehaviour:
   abilityName: Swing
   icon: {fileID: 21300000, guid: 919f0c93300c9414d944e617801e05dd, type: 3}
   cooldown: 2.5
+  projectilePrefab: {fileID: -2839429766194216985, guid: b7ecf6562c6cd33478e9e3a8be81d428, type: 3}
+  damage: 10
+  fireRate: 0.1
+  numberOfShots: 20
+  projectileSpeed: 20

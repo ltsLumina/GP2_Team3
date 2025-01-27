@@ -11,7 +11,9 @@ public class InputManager : MonoBehaviour
 
     public Vector2 MoveInput { get; private set; }
 
+    #region API
     public bool IsMoving { get; set; }
+    #endregion
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -19,7 +21,13 @@ public class InputManager : MonoBehaviour
         IsMoving = MoveInput != Vector2.zero;
     }
 
-    public void OnDash(InputAction.CallbackContext context) => Debug.LogWarning("Dash is not implemented.");
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+        
+        var dashController = GetComponentInParent<DashController>();
+        dashController.Dash();
+    }
 
     public void Ability(InputAction.CallbackContext context)
     {

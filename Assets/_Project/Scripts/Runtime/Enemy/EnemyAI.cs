@@ -23,8 +23,10 @@ public class EnemyAI : MonoBehaviour
     [Header("AI Attributes")]
     [SerializeField] int detectionRange = 10;
     [HideIf(nameof(brain), Brain.Boss)]
+    [Tooltip("The amount of time the enemy waits around at each wandering position, before moving to the next one.")]
     [SerializeField] float delayBetweenMoves = 5f;
     [EndIf]
+    [Tooltip("The amount of time the enemy will chase the player after the player has left the detection range. \nReturns to wandering after this time.")]
     [SerializeField] float chaseDuration = 5;
     [Space(5)]
     [SerializeField] float speed = 3.5f;
@@ -194,7 +196,7 @@ public class EnemyAI : MonoBehaviour
         attackCoroutine = null;
     }
 
-    bool nearTarget => agent.remainingDistance <= agent.stoppingDistance;
+    bool nearTarget => agent.remainingDistance <= agent.stoppingDistance && Vector3.Distance(target.position, transform.position) <= attackRange;
     
     void Chase()
     {

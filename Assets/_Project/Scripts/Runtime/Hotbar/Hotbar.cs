@@ -1,8 +1,5 @@
 #region
-using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.UI;
 #endregion
 
 public class Hotbar : MonoBehaviour

@@ -14,4 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Splash
   icon: {fileID: 21300000, guid: 8e3f292198aef2a438fdbbaf0a6d6113, type: 3}
-  cooldown: 2.5
+  cooldown: 5
+  projectilePrefab: {fileID: -2839429766194216985, guid: b7ecf6562c6cd33478e9e3a8be81d428, type: 3}
+  maxDistance: 10
+  projectileSpeed: 20
+  returnDelay: 0.35
+  returnSpeed: 30
+  damage: 50

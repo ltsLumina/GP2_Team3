@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using NoSlimes.Loggers;
 using TMPro;
 using UnityEngine;
+using VInspector;
 
 public class InventorySystem : LoggerMonoBehaviour
 {
@@ -27,7 +27,7 @@ public class InventorySystem : LoggerMonoBehaviour
     }
     
     // items that are currently in the inventory
-    private VInspector.SerializedDictionary<Slot, Item> inventoryItems = new();
+    [SerializeField] SerializedDictionary<Slot, Item> inventoryItems = new();
 
     // get all current items in the inventory
     public Dictionary<Slot, Item> GetInventoryItems() => inventoryItems;

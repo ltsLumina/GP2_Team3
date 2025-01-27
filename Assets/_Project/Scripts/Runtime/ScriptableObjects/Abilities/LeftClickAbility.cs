@@ -18,15 +18,18 @@ public class LeftClickAbility : Ability
         
             // TODO: probably redo this logic to use the IInteractable interface, but I was having issues before.
              // Needs to have a range check.
-        
+             
         // check for enemy under cursor
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         LayerMask enemyLayer = LayerMask.GetMask("Enemy");
 
         if (Physics.Raycast(ray, out var hit, Mathf.Infinity, enemyLayer))
         {
-            if (hit.collider.TryGetComponent<Enemy>(out var enemy))
+            if (hit.collider.TryGetComponent(out Enemy enemy))
             {
+                float distance = 5;
+                if (Vector3.Distance(Player.transform.position, enemy.transform.position) > distance) return;
+                
                 enemy.TakeDamage(damage);
             }
         }

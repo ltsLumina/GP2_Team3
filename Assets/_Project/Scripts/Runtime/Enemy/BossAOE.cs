@@ -1,5 +1,8 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BossAOE : MonoBehaviour
 {
@@ -7,49 +10,81 @@ public class BossAOE : MonoBehaviour
     private AOERing aoeRingPrefab;
     private List<AOERing> rings = new();
 
-    public enum RingType
+    public enum AttackType
     {
-        Dot = 0,
-        Instant
+        None = 0,
+        BloodRing
     }
     
     public void SpawnDOTRing()
     {
-        AOERing aoeRing = (AOERing)Instantiate(aoeRingPrefab, transform);
-        
-        // 0 - 49 Ring Instant dmg  : 50 - 99 Ring Dot dmg
-        aoeRing.ringType = Random.Range(0, 100) > 49 ? RingType.Instant : RingType.Dot;
-        aoeRing.timeToDamage = aoeRing.ringType == RingType.Instant ? 3 : 1;
-        
+        Vector3 position = new Vector3(transform.position.x + Random.Range(-10, 10), transform.position.y, transform.position.z);
+        AOERing aoeRing = Instantiate(aoeRingPrefab, position, aoeRingPrefab.transform.rotation, transform);
+        aoeRing.aoeRingMat.SetFloat("_Amount", 0.4f);
         rings.Add(aoeRing);
+        
+        StartCoroutine(SpawnRingVisual(aoeRing.aoeRingMat, aoeRing));
+    }
+
+    private AttackType RollNextAttack()
+    {
+        return (AttackType)Random.Range(1, Enum.GetNames(typeof(AttackType)).Length); // include last item with +1 since Random.Range on int is not max inclusive
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-            SpawnDOTRing();
         
-        for (int i = rings.Count - 1; i >= 0; i--)
+        switch (RollNextAttack())
         {
-            if (Time.time - rings[i].spawnTime > rings[i].timeToDamage && !rings[i].isDealingDamage)
+            case AttackType.BloodRing:
             {
-                if (rings[i].ringType == RingType.Instant)
-                {
-                    Debug.Log("Instant damage from ring, POOOOOOF");
-                    Destroy(rings[i].gameObject);
-                    rings.RemoveAt(i);
-                    continue;
-                }
-                Debug.Log("Start doing damage");
-                rings[i].isDealingDamage = true;
-            }
-
-            if (Time.time - rings[i].spawnTime > 5f && rings[i].ringType == RingType.Dot)
-            {
-                Debug.Log("Removing DOT ring");
-                Destroy(rings[i].gameObject);
-                rings.RemoveAt(i);
+                if (Input.GetKeyDown(KeyCode.R))
+                    SpawnDOTRing();
+                break;
             }
         }
+
+        if (rings.Count > 0)
+        {
+            for (int i = rings.Count - 1; i >= 0; i--)
+            {
+                // we have to call this before we potentially remove the ring at the end of this scope
+                rings[i].UpdateRing();
+
+                if (Time.time - rings[i].spawnTime > 5f && rings[i].isDealingDamage)
+                    StartCoroutine(DeSpawnRingVisual(rings[i].aoeRingMat, rings[i])); // pass in the index, we should handle the ring inside the coroutine (remove it)
+            }
+        }
+    }
+
+    private IEnumerator SpawnRingVisual(Material mat, AOERing aoeRing)
+    {
+        float vfxAmount = 0.4f;
+
+        while(vfxAmount < 1)
+        {
+            vfxAmount += Time.deltaTime;
+            mat.SetFloat("_Amount", vfxAmount);
+            yield return null;
+        }
+
+        aoeRing.isDealingDamage = true;
+        aoeRing.dotDamage = Random.Range(10, 25);  // not 
+    }
+
+    private IEnumerator DeSpawnRingVisual(Material mat, AOERing aoeRing)
+    {
+        float vfxAmount = 1f;
+        aoeRing.isDealingDamage = false;
+
+        while (vfxAmount > 0.4)
+        {
+            vfxAmount -= Time.deltaTime;
+            mat.SetFloat("_Amount", vfxAmount);
+            yield return null;
+        }
+
+        Destroy(aoeRing.gameObject);
+        rings.RemoveAt(rings.IndexOf(aoeRing));
     }
 }

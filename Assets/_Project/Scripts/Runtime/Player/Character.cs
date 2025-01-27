@@ -1,33 +1,38 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Character : MonoBehaviour
 {
-    private CharacterController characterController;
-    public float speed = 7.0f;
-    internal float moveDir;
-    internal object controller;
+    [Header("Movement Settings")]
+    [SerializeField] float speed = 7.0f;
 
-    InputAction moveAction;
+    float moveDir;
+    
+    CharacterController characterController;
+    InputManager inputs;
 
-    private void Start()
+    void Awake()
     {
         characterController = GetComponent<CharacterController>();
-
-        moveAction = InputSystem.actions["Move"];
+        inputs = GetComponentInChildren<InputManager>();
     }
 
-    private void Update()
+    void Update()
     {
-        var move = moveAction.ReadValue<Vector2>();
-        var moveVector = new Vector3(move.x, 0, move.y);
-
-        if (moveVector.magnitude > 1)
+        Vector3 moveVector = default;
+        if (!inputs) // backwards compatibility after I reworked this script
         {
-            moveVector.Normalize();
-        } 
+            moveVector.x = Input.GetAxis("Horizontal");
+            moveVector.z = Input.GetAxis("Vertical");
+        }
+        else
+        {
+            moveVector = new (inputs.MoveInput.x, 0, inputs.MoveInput.y);
+        }
 
-        characterController.Move(moveVector * speed * Time.deltaTime);
+        if (moveVector.magnitude > 1) moveVector.Normalize();
+
+        var player = GetComponent<Player>();
+        characterController.Move(moveVector * (speed * (player.PlayerStats[Player.Stats.MovementSpeed] / 100f) * Time.deltaTime));
     }
 }
 

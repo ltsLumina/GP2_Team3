@@ -42,7 +42,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EyeTexture:
-        m_Texture: {fileID: 2800000, guid: 926736c5c392382459eb7e8b6d6e2aa9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 13ec3a1bb1dc544489e0309b71ce7fb5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -66,11 +66,11 @@ Material:
     - _Float: 10
     - _Float_1: 83
     - _Float_2: 0.45
-    - _JitterResolution: 10
-    - _LimitDeltaTime: 0.3185981
+    - _JitterResolution: 4.3
+    - _LimitDeltaTime: 0.12841654
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _StaticJitterAmount: 130
+    - _StaticJitterAmount: 54
     m_Colors:
     - _Vector2: {r: -0, g: 0.03, b: 0, a: 0}
   m_BuildTextureStacks: []

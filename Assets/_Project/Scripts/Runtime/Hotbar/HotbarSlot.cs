@@ -1,8 +1,9 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
 using System.Collections;
 using DG.Tweening;
 using Lumina.Essentials.Attributes;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,7 +22,9 @@ public class HotbarSlot : MonoBehaviour
 
     void Start()
     {
+#if UNITY_EDITOR
         if (PrefabStageUtility.GetCurrentPrefabStage()) return;
+#endif
         
         #region Naming Utility & Validation
         if (ability)

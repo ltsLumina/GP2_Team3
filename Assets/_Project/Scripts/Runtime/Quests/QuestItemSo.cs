@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
+[CreateAssetMenu(menuName = "Quests/Quest Item", fileName = "new Quest Item")]
 public class QuestItemSO : ScriptableObject
 {
-    [SerializeField] private string itemID = "obj_1_key";
+    public string ItemID => name;
 }

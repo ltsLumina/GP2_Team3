@@ -1,28 +1,40 @@
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ItemDropper : MonoBehaviour
 {
-    
-    private float GetMonsterDropChance()
-    {
-        switch (GetComponent<Enemy>().Type)
-        {
-            case Enemy.EnemyType.Weak:
-                return 0.1f;
-            case Enemy.EnemyType.Normal:
-                return 0.15f;
-            case Enemy.EnemyType.Strong:
-                return 0.2f;
-        }
+    Enemy enemy;
 
-        // default chance
-        return 0.15f;
+    void Awake() => enemy = GetComponent<Enemy>();
+
+    float MonsterDropChance
+    {
+        get
+        {
+            switch (enemy.Type)
+            {
+                case Enemy.EnemyType.Weak:
+                    return 0.1f;
+
+                case Enemy.EnemyType.Normal:
+                    return 0.15f;
+
+                case Enemy.EnemyType.Strong:
+                    return 0.2f;
+                
+                case Enemy.EnemyType.DEBUG:
+                    return 1f;
+            }
+
+            // default chance
+            return 0.15f;
+        }
     }
-    
+
     // create the item and set position to the enemys position, call this upon enemy death
     public void DropItem()
     {
-        if (Random.value < GetMonsterDropChance())
+        if (Random.value <= MonsterDropChance)
         {
             // create the item if the random value falls within the drop chance rate
             // we always want to create a random item
@@ -31,7 +43,7 @@ public class ItemDropper : MonoBehaviour
             
             Item droppedItem = ItemManager.Instance.CreateItem(itemSlot, itemName);
             
-            droppedItem.transform.position = GetComponent<Enemy>().transform.position;
+            droppedItem.transform.position = enemy.transform.position;
         }
     }
 }

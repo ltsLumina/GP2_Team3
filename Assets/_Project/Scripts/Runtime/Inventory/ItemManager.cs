@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using Color = UnityEngine.Color;
+using VInspector;
 
 public class ItemManager : MonoBehaviour
 {
@@ -10,9 +9,9 @@ public class ItemManager : MonoBehaviour
     
     // we only need one item name per slot since we won't focus on creating multiple items
     // if we want multiple items we can store a list of item names per slot rather than just 1 string
-    public VInspector.SerializedDictionary<InventorySystem.Slot, string> itemNames = new();
+    public SerializedDictionary<InventorySystem.Slot, string> itemNames = new();
     
-    private VInspector.SerializedDictionary<Int64, Item> items = new();
+    private SerializedDictionary<Int64, Item> items = new();
 
     public enum ItemRarity
     {
@@ -40,47 +39,53 @@ public class ItemManager : MonoBehaviour
     
     public Item CreateItem(InventorySystem.Slot itemSlot, string itemName)
     {
-        GameObject temp = new GameObject("Item");
-        temp.tag = "Item";
-        temp.layer = LayerMask.NameToLayer("Interactable");
+        var prefab = Resources.Load<Item>("Loadable Prefabs/Item");
+        Item item = Instantiate(prefab);
+        
+        //GameObject temp = new GameObject("Item");
+        item.tag = "Item";
+        item.gameObject.layer = LayerMask.NameToLayer("Interactable");
         // set rotation of the text to 45 degrees to match the camera, makes the text readable from all angles
-        var rot = temp.transform.rotation.eulerAngles;
+        var rot = item.transform.rotation.eulerAngles;
         rot.x = 45;
-        temp.transform.rotation = Quaternion.Euler(rot);
+        item.transform.rotation = Quaternion.Euler(rot);
         
-        Item newItem = temp.AddComponent<Item>();
-        newItem.InitializeItem(itemSlot, itemName);
-        
-        Canvas itemCanvas = temp.AddComponent<Canvas>();
-        itemCanvas.renderMode = RenderMode.WorldSpace;
+        //Item newItem = temp.AddComponent<Item>();
+        //newItem.InitializeItem(itemSlot, itemName);
+        item.InitializeItem(itemSlot, itemName);
+
+        #region Handled in Item.cs Awake() now.
+        //Canvas itemCanvas = temp.AddComponent<Canvas>();
+        //itemCanvas.renderMode = RenderMode.WorldSpace;
         
         // style the text displayed above dropped items
-        TextMeshPro itemText = temp.AddComponent<TextMeshPro>();
-        itemText.autoSizeTextContainer = true;
-        itemText.text = $"<mark=#000000>{itemName}</mark>";
-        itemText.fontSize = 4f;
-        itemText.alignment = TextAlignmentOptions.Center;
-        itemText.textWrappingMode = TextWrappingModes.NoWrap;
+        //TextMeshPro itemText = temp.AddComponent<TextMeshPro>();
+        // itemText.autoSizeTextContainer = true;
+        // itemText.text = $"<mark=#000000>{itemName}</mark>";
+        // itemText.fontSize = 4f;
+        // itemText.alignment = TextAlignmentOptions.Center;
+        // itemText.textWrappingMode = TextWrappingModes.NoWrap;
 
-        switch (newItem.rarity)
-        {
-            case ItemRarity.Common: itemText.color = Color.white; break;
-            case ItemRarity.Uncommon: itemText.color = Color.green; break;
-            case ItemRarity.Rare: itemText.color = Color.blue; break;
-            case ItemRarity.Epic: itemText.color = Color.yellow; break;
-            case ItemRarity.Legendary: itemText.color = Color.red; break;
-        }
+        // switch (newItem.rarity)
+        // {
+        //     case ItemRarity.Common: itemText.color = Color.white; break;
+        //     case ItemRarity.Uncommon: itemText.color = Color.green; break;
+        //     case ItemRarity.Rare: itemText.color = Color.blue; break;
+        //     case ItemRarity.Epic: itemText.color = Color.yellow; break;
+        //     case ItemRarity.Legendary: itemText.color = Color.red; break;
+        // }
         
-        itemText.ForceMeshUpdate();
+        //itemText.ForceMeshUpdate();
         
-        BoxCollider itemCollider = temp.AddComponent<BoxCollider>();
-        itemCollider.isTrigger = true; // set to isTrigger to not block any objects in the gameworld but should still be hit by raycast
-        Debug.Log(itemText.textBounds.size);
-        itemCollider.size = itemText.textBounds.size + new Vector3(0, 0, 0.1f);
+        //BoxCollider itemCollider = temp.AddComponent<BoxCollider>();
+        //itemCollider.isTrigger = true; // set to isTrigger to not block any objects in the gameworld but should still be hit by raycast
+        //Debug.Log(itemText.textBounds.size);
+        //itemCollider.size = itemText.textBounds.size + new Vector3(0, 0, 0.1f);
+        #endregion
         
-        items.Add(newItem.GetComponent<Item>().id, newItem);
+        items.Add(item.id, item);
         
-        return newItem;
+        return item;
     }
 
     public Item FindItemById(Int64 id) => items.GetValueOrDefault(id);
