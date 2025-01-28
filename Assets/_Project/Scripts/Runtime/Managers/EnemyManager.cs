@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField] 
-    private Enemy enemyPrefab;
+    public Enemy enemyPrefab;
     public static EnemyManager Instance { get; private set; }
+
+    public static EnemySpawnPoint[] spawnPoints;
 
     private void Awake()
     {
@@ -14,10 +18,15 @@ public class EnemyManager : MonoBehaviour
         else
             Destroy(gameObject);
     }
+
+    private void Start()
+    {
+        spawnPoints = GameObject.FindObjectsByType<EnemySpawnPoint>(FindObjectsSortMode.None);
+    }
     
     private List<Enemy> activeEnemies = new List<Enemy>();
-    
-    public void UpdateEnemyManager()
+
+    private void UpdateEnemies()
     {
         for (int i = activeEnemies.Count - 1; i >= 0; i--)
         {
@@ -26,6 +35,19 @@ public class EnemyManager : MonoBehaviour
             else
                 activeEnemies.RemoveAt(i);
         }
+    }
+
+    private void UpdateSpawnPoints()
+    {
+        foreach (EnemySpawnPoint point in spawnPoints)
+            point.UpdateSpawnPoint();
+    }
+    
+    public void UpdateEnemyManager()
+    {
+        UpdateSpawnPoints();
+        
+        UpdateEnemies();
         
         // remove a random enemy
         if (Input.GetKeyDown(KeyCode.K) && activeEnemies.Count > 0)
@@ -35,14 +57,11 @@ public class EnemyManager : MonoBehaviour
             activeEnemies[randomIndex].GetComponent<ItemDropper>().DropItem();
             activeEnemies[randomIndex].gameObject.SetActive(false);
         }
-        if (Input.GetMouseButtonDown(1))
-            SpawnEnemy();
     }
 
-    public void SpawnEnemy()
+    public void SpawnEnemy(Vector3 position)
     {
-        Enemy newEnemy = Instantiate(enemyPrefab, transform);
-        newEnemy.transform.position = new Vector3(Random.Range(-10, 10), 0, 0);
+        Enemy newEnemy = Instantiate(enemyPrefab, position, Quaternion.identity, transform);
         // should probably object pool enemies down the line
         activeEnemies.Add(newEnemy);
     }

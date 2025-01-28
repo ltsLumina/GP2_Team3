@@ -52,7 +52,6 @@ public class BossAOE : MonoBehaviour
         //if (Time.time - lastAttackTime >= attackCooldown)
         //{
             AttackType nextAttack = RollNextAttack();
-            Debug.Log(nextAttack);
             switch (nextAttack)
             {
                 case AttackType.BloodRing:
