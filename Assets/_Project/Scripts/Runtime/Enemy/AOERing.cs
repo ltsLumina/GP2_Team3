@@ -6,13 +6,15 @@ public class AOERing : MonoBehaviour
     public float spawnTime { get; private set; }
     public bool isDealingDamage { get; set; }
 
-    public int dotDamage;
+    public int ringDamage;
     private float dotTimer;
-
+    
     private Player player;
     private MeshRenderer meshRenderer;
     private Vector3 ringSize;
     public Material aoeRingMat { get; private set; }
+    
+    public BossAOE.AttackType ringType { get; set; }
 
     private void Awake()
     {
@@ -32,18 +34,30 @@ public class AOERing : MonoBehaviour
         return (distance <= ringSize.x && distance <= ringSize.z);
     }
 
+    public void DoInstantDamage()
+    {
+        if (CheckDistanceAgainstPlayer())
+        {
+            player.TryGetComponent(out IDamageable comp);
+            comp.TakeDamage(ringDamage);
+        }
+    }
+
     public void UpdateRing()
     {
         ringSize = meshRenderer.bounds.size / 2;
         
         if (CheckDistanceAgainstPlayer() && isDealingDamage)
         {
-            dotTimer += Time.deltaTime;
-            if (dotTimer >= 1f) // contiuous damage would be better than once a second damage but that would require some weird rounding rules unless we make health a float
+            if (ringType == BossAOE.AttackType.BloodRing)
             {
-                player.TryGetComponent(out IDamageable comp);
-                comp.TakeDamage(Mathf.CeilToInt(dotDamage));
-                dotTimer = 0f;
+                dotTimer += Time.deltaTime;
+                if (dotTimer >= 1f) // contiuous damage would be better than once a second damage but that would require some weird rounding rules unless we make health a float
+                {
+                    player.TryGetComponent(out IDamageable comp);
+                    comp.TakeDamage(ringDamage);
+                    dotTimer = 0f;
+                }
             }
         }
     }

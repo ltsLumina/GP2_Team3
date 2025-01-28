@@ -10,20 +10,36 @@ public class BossAOE : MonoBehaviour
     private AOERing aoeRingPrefab;
     private List<AOERing> rings = new();
 
+    private float lastAttackTime = 0;
+    [SerializeField]
+    private float attackCooldown = 5f;
+
     public enum AttackType
     {
         None = 0,
-        BloodRing
+        BloodRing,
+        SpikeRing
     }
     
-    public void SpawnDOTRing()
+    private void SpawnDOTRing()
     {
         Vector3 position = new Vector3(transform.position.x + Random.Range(-10, 10), transform.position.y, transform.position.z);
         AOERing aoeRing = Instantiate(aoeRingPrefab, position, aoeRingPrefab.transform.rotation, transform);
+        aoeRing.ringType = AttackType.BloodRing;
         aoeRing.aoeRingMat.SetFloat("_Amount", 0.4f);
         rings.Add(aoeRing);
         
         StartCoroutine(SpawnRingVisual(aoeRing.aoeRingMat, aoeRing));
+    }
+
+    private void SpawnSpikeRing()
+    {
+        Vector3 position = new Vector3(transform.position.x + Random.Range(-10, 10), transform.position.y, transform.position.z);
+        AOERing aoeRing = Instantiate(aoeRingPrefab, position, aoeRingPrefab.transform.rotation, transform);
+        aoeRing.ringType = AttackType.SpikeRing;
+        aoeRing.aoeRingMat.SetFloat("_Amount", 1f);
+        aoeRing.ringDamage = 250;
+        rings.Add(aoeRing);
     }
 
     private AttackType RollNextAttack()
@@ -33,16 +49,26 @@ public class BossAOE : MonoBehaviour
 
     private void Update()
     {
-        
-        switch (RollNextAttack())
-        {
-            case AttackType.BloodRing:
+        //if (Time.time - lastAttackTime >= attackCooldown)
+        //{
+            AttackType nextAttack = RollNextAttack();
+            Debug.Log(nextAttack);
+            switch (nextAttack)
             {
-                if (Input.GetKeyDown(KeyCode.R))
-                    SpawnDOTRing();
-                break;
+                case AttackType.BloodRing:
+                {
+                    if (Input.GetKeyDown(KeyCode.R))
+                        SpawnDOTRing();
+                    break;
+                }
+                case AttackType.SpikeRing:
+                    if (Input.GetKeyDown(KeyCode.F))
+                        SpawnSpikeRing();
+                    break;
             }
-        }
+
+       //    lastAttackTime = Time.time;
+        //}
 
         if (rings.Count > 0)
         {
@@ -51,9 +77,21 @@ public class BossAOE : MonoBehaviour
                 // we have to call this before we potentially remove the ring at the end of this scope
                 rings[i].UpdateRing();
 
-                if (Time.time - rings[i].spawnTime > 5f && rings[i].isDealingDamage)
-                    StartCoroutine(DeSpawnRingVisual(rings[i].aoeRingMat, rings[i])); // pass in the index, we should handle the ring inside the coroutine (remove it)
-            }
+                if (rings[i].ringType == AttackType.BloodRing)
+                {
+                    if (Time.time - rings[i].spawnTime > 5f && rings[i].isDealingDamage)
+                        StartCoroutine(DeSpawnRingVisual(rings[i].aoeRingMat, rings[i]));
+
+                    continue;
+                }
+
+                if (Time.time - rings[i].spawnTime > 2f)
+                {
+                    rings[i].DoInstantDamage();
+                    Destroy(rings[i].gameObject);
+                    rings.RemoveAt(i);
+                }
+            } 
         }
     }
 
@@ -69,7 +107,7 @@ public class BossAOE : MonoBehaviour
         }
 
         aoeRing.isDealingDamage = true;
-        aoeRing.dotDamage = Random.Range(10, 25);  // not 
+        aoeRing.ringDamage = Random.Range(10, 25);  // not 
     }
 
     private IEnumerator DeSpawnRingVisual(Material mat, AOERing aoeRing)
