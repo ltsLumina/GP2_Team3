@@ -45,7 +45,7 @@ Material:
     - _HealthAmount: 0.468
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ResourceAmount: 0.9
+    - _ResourceAmount: 100
     m_Colors:
     - _MainColor: {r: 0.8962264, g: 0.30015126, b: 0.30015126, a: 0}
     - _SecondaryColor: {r: 0.7169812, g: 0.19277322, b: 0.19277322, a: 1}

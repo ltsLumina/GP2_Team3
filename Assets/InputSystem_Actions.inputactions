@@ -76,6 +76,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "6ceda96c-bebc-4457-8d34-6be16031a108",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "5ee7922e-8ece-4f2b-8fb3-bd6565781431",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -290,6 +308,17 @@
                 },
                 {
                     "name": "",
+                    "id": "0084c93e-be97-4412-bc4c-954ee4233e21",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "1534dc16-a6aa-499d-9c3a-22b47347b52a",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -313,7 +342,7 @@
                 {
                     "name": "",
                     "id": "1c04ea5f-b012-41d1-a6f7-02e963b52893",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -323,56 +352,23 @@
                 },
                 {
                     "name": "",
-                    "id": "b3f66d0b-7751-423f-908b-a11c5bd95930",
-                    "path": "<Gamepad>/buttonNorth",
+                    "id": "69a3a046-dd0b-44f0-ac98-8fd620882a91",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "4bfa7f2a-2210-42e3-b099-d5cfe5300807",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
+                    "id": "b3f66d0b-7751-423f-908b-a11c5bd95930",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "Hold",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Ability",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0fa8a86b-5520-40a6-91de-f37bb2337ee5",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Ability",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0ee98745-ea33-43cf-851f-4d90c78c071b",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Ability",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3a1bd51a-0f71-4feb-b050-e3643c168592",
-                    "path": "<Keyboard>/4",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Ability",
+                    "groups": "Gamepad",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -400,7 +396,7 @@
                 },
                 {
                     "name": "",
-                    "id": "296a5538-6bdf-450b-b86c-89423ff4b410",
+                    "id": "0ee98745-ea33-43cf-851f-4d90c78c071b",
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
@@ -411,8 +407,8 @@
                 },
                 {
                     "name": "",
-                    "id": "fe644c62-7330-41a3-89a7-eca70f03f747",
-                    "path": "<Keyboard>/j",
+                    "id": "3a1bd51a-0f71-4feb-b050-e3643c168592",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -422,34 +418,34 @@
                 },
                 {
                     "name": "",
-                    "id": "51dcd366-63a6-44a9-ba79-062a3a0a8735",
-                    "path": "<Keyboard>/c",
+                    "id": "837c8311-e912-4225-ad6c-1475817bda62",
+                    "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Ability",
+                    "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "8a30f6b8-6e4a-4cfc-8852-51b1a94fea79",
-                    "path": "<Keyboard>/k",
+                    "id": "dab06d8a-5924-49fb-8679-5b6274164a7c",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Ability",
+                    "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "059add43-4e08-43b6-bcb6-d2fe4be8490d",
-                    "path": "<Keyboard>/l",
+                    "id": "5010c58b-6005-4d37-96cc-947862ead280",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Ability",
+                    "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

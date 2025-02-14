@@ -25,7 +25,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: c4ed8dc9154f7bb4aad6bf8156dff4d1, type: 3}
+        m_Texture: {fileID: 2800000, guid: ec8c78c68ee67b945a315aadaa339bf8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normals:
@@ -33,14 +33,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_ec3d18a69bf1419b8f01f76972b64cbf_Texture_1_Texture2D:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Transparent:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TransparentTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -59,13 +51,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _JitterResolution: 10
-    - _LimitDeltaTime: 0.7956991
+    - _LimitDeltaTime: 0.22737634
     - _Pixelation: 0
     - _Pixels: 48.8
     - _QueueControl: 0
     - _QueueOffset: 0
     - _StaticJitterAmount: 38
-    - _UseTransparency: 0
     - _VertexJitter: 1
     m_Colors:
     - _Color: {r: 0, g: 1, b: 0.27121735, a: 0}

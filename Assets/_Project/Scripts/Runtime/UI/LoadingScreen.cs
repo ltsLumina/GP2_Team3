@@ -18,7 +18,7 @@ namespace NoSlimes
 
         private void Awake()
         {
-            screen = transform.GetChild(0).gameObject;
+            //screen = transform.GetChild(0).gameObject;
         }
 
         public void Show()

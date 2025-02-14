@@ -1,5 +1,7 @@
+using System;
 using NoSlimes.Loggers;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class State : LoggerMonoBehaviour
 {
@@ -28,6 +30,15 @@ public class GameManager : MonoBehaviour
         set => _player = value; 
     }
 
+    public Image HealthBar;
+    public Image HealthBarFill;
+
+    public State CurrentState => currentState;
+
+    public static event Action OnReady;
+
+    public static event Action OnGameplay;
+
     private void Awake()
     {
         if (Instance == null)
@@ -42,17 +53,31 @@ public class GameManager : MonoBehaviour
             if (s.GetType() == typeof(PlayingState))
             {
                 currentState = s;
-                return;
+                break;
             }
         }
+
+
     }
 
     public void Start()
     {
         // make sure we store the player in GameManager, it makes it so much easier to access the player at any time in any script
         Player = FindFirstObjectByType<Player>();
+        
+        HealthBar = GameObject.FindWithTag("BossHealth").GetComponent<Image>();
+        HealthBarFill = GameObject.FindWithTag("BossHealthFill").GetComponent<Image>();
+        
+        HealthBar.gameObject.SetActive(false);
+        HealthBar.gameObject.SetActive(false);
+
+        OnReady?.Invoke();
     }
 
+    private void OnEnable()
+    {
+        OnGameplay?.Invoke();
+    }
 
     public void Update()
     {

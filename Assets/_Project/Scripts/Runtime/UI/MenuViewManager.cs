@@ -79,7 +79,7 @@ public class MenuViewManager : LoggerMonoBehaviour
 
     public static async void Show(MenuView view, bool rememberCurrent = true)
     {
-        if (Instance.currentView)
+        if (Instance.currentView && Instance.currentView != view)
         {
             if (rememberCurrent)
             {
@@ -89,12 +89,13 @@ public class MenuViewManager : LoggerMonoBehaviour
             await HideViewAsync(Instance.currentView);
         }
 
-        Instance.openViews.Add(view);
+        view.transform.localScale = Vector3.zero;
 
         view.Show();
         view.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
 
         Instance.currentView = view;
+        Instance.openViews.Add(view);
     }
 
     public static void ShowLast()
@@ -141,7 +142,7 @@ public class MenuViewManager : LoggerMonoBehaviour
     {
         var view = GetView<T>();
 
-        if(view == null)
+        if (view == null)
         {
             Instance.Logger.LogError("View is null.", Instance);
             return null;
@@ -176,11 +177,11 @@ public class MenuViewManager : LoggerMonoBehaviour
         }
     }
 
-    public static async void HideAll()
+    public static void HideAll()
     {
         foreach (var view in Instance.views)
         {
-            await HideViewAsync(view);
+            _ = HideViewAsync(view);
         }
     }
 

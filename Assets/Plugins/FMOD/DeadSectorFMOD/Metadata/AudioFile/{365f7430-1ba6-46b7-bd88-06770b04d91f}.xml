@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{365f7430-1ba6-46b7-bd88-06770b04d91f}">
+		<property name="assetPath">
+			<value>Alligator Growls 01 [2025-02-12 102922] - Trimmed.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>1.1116041666666667</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{4b3748bf-cc14-4a69-bded-52a55d2f68e2}</destination>
+		</relationship>
+	</object>
+</objects>

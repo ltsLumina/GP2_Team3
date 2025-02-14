@@ -1,10 +1,15 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PauseState : State
 {
     public override void EnterState()
     {
         Logger.Log("Entering Pause State", this);
+
+        MenuViewManager.Show<PauseMenuView>();
+        InputSystem.actions.FindActionMap("Player").Disable();
+        InputSystem.actions.FindActionMap("UI").Enable();
     }
     
     public override void UpdateState()

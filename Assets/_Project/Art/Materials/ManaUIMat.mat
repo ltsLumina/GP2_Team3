@@ -45,10 +45,11 @@ Material:
     - _HealthAmount: 0.468
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ResourceAmount: 0.442
+    - _ResourceAmount: 1
+    - _UseMasking: 0
     m_Colors:
-    - _MainColor: {r: 0.21176472, g: 0.37254903, b: 0.72156864, a: 1}
-    - _SecondaryColor: {r: 0, g: 0.22903581, b: 0.7169812, a: 1}
+    - _MainColor: {r: 0.09411764, g: 0.57178664, b: 0.93333334, a: 1}
+    - _SecondaryColor: {r: 0.1254902, g: 0.83436906, b: 0.9137255, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &1201527729978460857

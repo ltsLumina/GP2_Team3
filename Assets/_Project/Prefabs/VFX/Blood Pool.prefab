@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4493301080737575562}
   - component: {fileID: 6742142359250846251}
   - component: {fileID: 1371905759514675831}
+  - component: {fileID: 4008063891145735228}
   m_Layer: 0
   m_Name: Blood Pool
   m_TagString: Untagged
@@ -65,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e9b8a030ee470a043908e3e6662f10b0, type: 2}
+  - {fileID: 2100000, guid: 61abe4b2c694a8040a118e30d5b7e1c4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,4 +100,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 262727386e6b0ff4ab2fb732e544dfce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dotDamage: 0
+  ringIndicator: {fileID: 0}
+  ringDamage: 0
+  didStart: 0
+  meshRenderer: {fileID: 6742142359250846251}
+  boss: {fileID: 0}
+  bloodRingScale: 0
+--- !u!114 &4008063891145735228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504321663893769921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -813926192
+      Data2: 1258366061
+      Data3: -1438475087
+      Data4: 985416672
+    Path: event:/Enemy/SlimePool
+  Event: 
+  EventPlayTrigger: 11
+  EventStopTrigger: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 8.400001
+  OverrideMaxDistance: 40

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67381d67ee0ffbb4495c5032b0227307, type: 3}
+  m_Name: 3_Offices_CaptainsLog
+  m_EditorClassIdentifier: 
+  dialogData:
+    title: "Captain\u2019s Log"
+    content: "The crystalline material is unlike anything we\u2019ve ever encountered.
+      Its energy resonance is incredible, and we created a fascinating weapon with
+      it. But\u2026 there\u2019s something wrong. The crew\u2019s been acting erratic.
+      And the growth\u2014it\u2019s everywhere. I begged the Board to let us abort,
+      but they refused. If you\u2019re hearing this\u2026 don\u2019t let it spread."
+    dialogType: 0
+    bubbleDuration: 3
+    font: {fileID: 11400000, guid: 176ed31151628e04f8d5c1bc098557a5, type: 2}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    fontStyle: 0
+    textAlignment: 257
+    fontSize: 36

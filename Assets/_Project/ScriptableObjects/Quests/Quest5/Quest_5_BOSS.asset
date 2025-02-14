@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c13c81dba129b4a8d0255a5cf29dec, type: 3}
+  m_Name: Quest_5_BOSS
+  m_EditorClassIdentifier: 
+  previousQuest: {fileID: 11400000, guid: 58770f8c228f1fb47b02b18587044ec5, type: 2}
+  nextQuest: {fileID: 0}
+  questObjective:
+    objectiveName: Send the Signal
+    objectiveDescription: <color=red><b>KILL THE BOSS</b></color>
+    giveLevelOnComplete: 0
+    requiredItems:
+    - item: {fileID: 11400000, guid: fdf56d2b5e35ddc42acd4d43b000d584, type: 2}
+      amount: 0

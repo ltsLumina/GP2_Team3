@@ -93,7 +93,7 @@ public class DialogManager : LoggerMonoBehaviour
 
         bubbleShown = true;
         await currentBubble.SetData(dialogData);
-        await Awaitable.WaitForSecondsAsync(0.5f);
+        await Awaitable.WaitForSecondsAsync(dialogData.BubbleDuration);
 
         MenuViewManager.HideView(currentBubble);
 

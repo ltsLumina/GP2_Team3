@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{ae19c2b3-c70f-433c-95a8-dc70461d1c9d}">
+		<property name="assetPath">
+			<value>ZOOM0071_TrLR.WAV</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>31.369333333333334</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{4b3748bf-cc14-4a69-bded-52a55d2f68e2}</destination>
+		</relationship>
+	</object>
+</objects>

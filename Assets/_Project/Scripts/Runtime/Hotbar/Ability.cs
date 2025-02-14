@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Lumina.Essentials.Attributes;
+using UnityEngine;
+using VInspector;
 
 /// <summary>
 /// Generic ability data class.
@@ -8,15 +10,37 @@ public abstract class Ability : ScriptableObject
     [SerializeField] string abilityName;
     [SerializeField] Sprite icon;
     [SerializeField] float cooldown;
+    [Tooltip("A positive value will increase the mana amount. Vice versa, a negative value will decrease the mana amount." + "\nE.g. Use 10 to increase the mana by 10. Use -10 to decrease the mana by 10.")]
+    [SerializeField] int manaCost;
 
+    [Space(10)]
+    [SerializeField] bool cameraShake;
+    [Header("Camera Shake")]
+    [SerializeField] protected float duration = 0.1f;
+    [SerializeField] protected float strength = 0.35f;
+    [SerializeField] protected int vibrato = 3;
+    [SerializeField] protected float randomness = 45;
+    [Space(10)]
+    [Header("Misc")]
+    [SerializeField, ReadOnly] bool ignore; 
+    
     public string Name => !string.IsNullOrEmpty(abilityName) ? abilityName : "Unnamed Ability";
     public Sprite Icon => icon ??= Sprite.Create(new (100, 100), new Rect(0, 0, 100, 100), Vector2.one * 0.5f);
-    public float Cooldown => cooldown;
+    public float Cooldown => Mathf.Clamp(cooldown, 0.25f, cooldown) * Player[Player.Stats.CooldownReduction];
+    public int ManaCost => manaCost;
 
     public bool IsMenu => GetType().Name.Contains("Menu");
     public bool IsMouse => GetType().Name.Contains("Click");
 
-    public Player Player => FindAnyObjectByType<Player>();
+    Player player;
+    protected Player Player
+    {
+        get
+        {
+            if (player == null) player = GameManager.Instance.Player;
+            return player;
+        }
+    }
 
     public abstract void Use();
 

@@ -41,4 +41,10 @@ public class CoroutineHelper : MonoBehaviour
         Debug.LogError("[Coroutine Helper] is null. Coroutine cannot be started.");
         return null;
     }
+    
+    new public static void StopCoroutine(Coroutine coroutine)
+    {
+        if (Instance != null) ((MonoBehaviour) Instance).StopCoroutine(coroutine);
+        else Debug.LogError("[Coroutine Helper] is null. Coroutine cannot be stopped.");
+    }
 }

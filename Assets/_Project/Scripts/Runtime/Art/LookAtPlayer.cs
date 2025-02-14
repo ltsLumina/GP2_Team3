@@ -1,44 +1,15 @@
-using UnityEditor;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class LookAtPlayer : MonoBehaviour
 {
     Player player;
 
-    void Start() => player = FindAnyObjectByType<Player>();
-
-#if UNITY_EDITOR
-    void OnEnable()
+    void Start()
     {
-        if (!Application.isPlaying) EditorApplication.update += Update;
+        player = FindAnyObjectByType<Player>();
     }
-
-    void OnDisable()
-    {
-        if (!Application.isPlaying) EditorApplication.update -= Update;
-    }
-#endif
-
-    // Update is called once per frame
     void Update()
     {
-        switch (Application.isPlaying)
-        {
-            case true: // play mode
-                transform.up = transform.position - player.transform.position;
-                break;
-
-            case false when Application.isEditor: // edit mode 
-            {
-                if (SceneView.lastActiveSceneView)
-                {
-                    Camera sceneViewCamera = SceneView.lastActiveSceneView.camera;
-                    transform.up = transform.position - sceneViewCamera.transform.position;
-                }
-
-                break;
-            }
-        }
+        transform.up = transform.position - player.transform.position + new Vector3(0, -1.5f, 0);
     }
 }

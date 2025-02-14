@@ -8,7 +8,7 @@ public abstract class MultiPageMenuView : MenuView
     [SerializeField] private Button prevPageButton;
     [SerializeField] protected RectTransform[] pages;
 
-    private int pageIndex;
+    protected int pageIndex;
 
     public override void Initialize()
     {
@@ -35,10 +35,10 @@ public abstract class MultiPageMenuView : MenuView
         UpdatePageVisibility();
     }
 
-    protected void NextPage() => SetPage((pageIndex + 1) % pages.Length);
-    protected void PrevPage() => SetPage((pageIndex - 1 + pages.Length) % pages.Length);
+    protected virtual void NextPage() => SetPage((pageIndex + 1) % pages.Length);
+    protected virtual void PrevPage() => SetPage((pageIndex - 1 + pages.Length) % pages.Length);
 
-    private void SetPage(int newIndex)
+    protected virtual void SetPage(int newIndex)
     {
         if (pages == null || pages.Length == 0) return;
 

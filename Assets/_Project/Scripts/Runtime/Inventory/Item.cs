@@ -1,14 +1,34 @@
+#region
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using TMPro;
 using UnityEngine;
+using VInspector;
+
+// Ensure you add the Newtonsoft.Json package to your Unity project
 using Random = UnityEngine.Random;
+#endregion
 
 public class Item : MonoBehaviour, IInteractable
 {
     TextMeshPro textMesh;
     BoxCollider boxCollider;
-    
+
+    static long _id;
+    public long id;
+    public string Name { get; set; }
+    public InventorySystem.Slot itemSlot { get; private set; }
+    public Sprite sprite;
+    public ItemManager.ItemRarity Rarity { get; private set; }
+    public Dictionary<Player.Stats, int> attributes = new ();
+
+    private string originalText = string.Empty;
+
+    public int accumulatedAttribute = 0;
+
     void Initialize(string itemName)
     {
         var canvas = GetComponent<Canvas>();
@@ -18,26 +38,37 @@ public class Item : MonoBehaviour, IInteractable
         var itemText = GetComponent<TextMeshPro>();
         itemText.autoSizeTextContainer = true;
         itemText.text = $"<mark=#000000>{itemName}</mark>";
+        originalText = itemText.text;
         itemText.fontSize = 4f;
         itemText.alignment = TextAlignmentOptions.Center;
         itemText.textWrappingMode = TextWrappingModes.NoWrap;
 
-        switch (rarity)
+        var manager = ItemManager.Instance;
+
+        if (manager.itemSprites.TryGetValue(itemSlot, out var sprites))
+            if (sprites.TryGetValue(Rarity, out Sprite s))
+                sprite = s;
+        
+        if (sprite == null)
+            Debug.Log("Failed to find sprite");
+
+        switch (Rarity)
         {
             case ItemManager.ItemRarity.Common:
-                itemText.color = Color.white; break;
-            
+                itemText.color = Color.white;
+                break;
+
             case ItemManager.ItemRarity.Uncommon:
-                itemText.color = Color.green; break;
+                itemText.color = Color.green;
+                break;
 
             case ItemManager.ItemRarity.Rare:
-                itemText.color = Color.blue; break;
-
-            case ItemManager.ItemRarity.Epic:
-                itemText.color = Color.yellow; break;
+                itemText.color = new Color(0, 157, 255);
+                break;
 
             case ItemManager.ItemRarity.Legendary:
-                itemText.color = Color.red; break;
+                itemText.color = Color.yellow;
+                break;
         }
 
         itemText.ForceMeshUpdate();
@@ -45,111 +76,120 @@ public class Item : MonoBehaviour, IInteractable
         boxCollider = GetComponent<BoxCollider>();
         boxCollider.isTrigger = true;
         boxCollider.size = itemText.textBounds.size + new Vector3(0, 0, 0.1f);
+        
+        Debug.Log($"Item ID: {id}");
     }
 
-    public void OnInteract()
-    {
-        InventorySystem.Instance.ReplaceItemInInventory(itemSlot, this);
-    }
+    public void OnInteract() => InventorySystem.Instance.ReplaceItemInInventory(itemSlot, this);
 
     public void OnHoverEnter()
     {
-        if (textMesh == null) 
-            textMesh = GetComponent<TextMeshPro>();
-        if (boxCollider == null)
-            boxCollider = GetComponent<BoxCollider>();
+        if (textMesh    == null) textMesh = GetComponent<TextMeshPro>();
+        if (boxCollider == null) boxCollider = GetComponent<BoxCollider>();
         textMesh.fontSize = 6f;
+        textMesh.text = originalText;
+        if (InventorySystem.Instance.GetInventoryItems().TryGetValue(itemSlot, out Item item))
+        {
+            if (accumulatedAttribute > item.accumulatedAttribute)
+                textMesh.text = $"<mark=#000000><color=green>+</color> {textMesh.text} <color=green>+</color></mark>";
+            else
+                textMesh.text = $"<mark=#000000><color=red>-</color> {textMesh.text} <color=red>-</color></mark>";
+        }
         textMesh.ForceMeshUpdate();
         boxCollider.size = textMesh.textBounds.size + new Vector3(0, 0, 0.1f);
     }
 
     public void OnHoverExit()
     {
-        if (textMesh == null) 
-            textMesh = GetComponent<TextMeshPro>();
-        if (boxCollider == null)
-            boxCollider = GetComponent<BoxCollider>();
+        if (textMesh    == null) textMesh = GetComponent<TextMeshPro>();
+        if (boxCollider == null) boxCollider = GetComponent<BoxCollider>();
         textMesh.fontSize = 4f;
+        textMesh.text = originalText;
         textMesh.ForceMeshUpdate();
         boxCollider.size = textMesh.textBounds.size + new Vector3(0, 0, 0.1f);
     }
-    
+
     public void InitializeItem(InventorySystem.Slot slot, string itemName)
     {
         id = ++_id;
         itemSlot = slot;
         Name = itemName;
-        
-        // setting sprite dynamically lets us spawn items without having them ...
-        // pre-loaded in memory with predefined slot status and manually assigned sprites
-        switch (itemSlot)
-        {
-            case InventorySystem.Slot.Helmet: break;
-            case InventorySystem.Slot.Armor: break;
-            case InventorySystem.Slot.Legs: break;
-            case InventorySystem.Slot.Boots: break;
-            case InventorySystem.Slot.Weapon: break;
-        }
-        
         RollItemRarity();
         RollAttributes();
-
         Initialize(itemName);
     }
-    // we should never fill out a whole Int64 with IDs
-    // assuming each item created increase this ID by 1
-    private static Int64 _id;
-    public Int64 id;
-    public string Name { get; set; } // alex: 'name' is a reserved keyword, so I changed it to 'Name'. Could be anything other than 'name' (case-sensitive)
-    
-    public InventorySystem.Slot itemSlot { get; private set; }
 
-    public Sprite sprite;
-    
-    public ItemManager.ItemRarity rarity { get; private set; }
-    
-    public Dictionary<Player.Stats, int> attributes = new();
-
-    // yes this is a mess to read but hear me out, it's 1 line
-    // sets id to an ID that is not 0
     public void SetId() => id = id == 0 ? id = ++_id : id;
 
-    private void RollItemRarity()
+    void RollItemRarity()
     {
-        int randomRoll = Random.Range(0, 1001); // integer random range is non inclusive with the max value
-                                                // we're also rolling to 1000 because that lets us use more accurate percentages (decimal values) without
-                                                // potential floating point inaccuracy with Random.value which is a 0 - 1 value
-        if (randomRoll <= 450)
-            rarity = ItemManager.ItemRarity.Common;
-        else if (randomRoll <= 750)
-            rarity = ItemManager.ItemRarity.Uncommon;
-        else if (randomRoll <= 900)
-            rarity = ItemManager.ItemRarity.Rare;
-        else if (randomRoll <= 975)
-            rarity = ItemManager.ItemRarity.Epic;
-        else if (randomRoll <= 1000)
-            rarity = ItemManager.ItemRarity.Legendary;
+        int randomRoll = Random.Range(0, 1001);
+
+        Rarity = randomRoll switch
+                 { <= 475  => ItemManager.ItemRarity.Common,
+                   <= 825  => ItemManager.ItemRarity.Uncommon,
+                   <= 975  => ItemManager.ItemRarity.Rare,
+                   <= 1000 => ItemManager.ItemRarity.Legendary,
+                   _       => Rarity };
     }
 
     public void RollAttributes()
     {
-        // alpha will only allow for 1 attribute per item
-        // weapon can roll between 2 attributes
-        // higher rarity will allow for higher roll
-        int attributeValue = Random.Range(10 + ((int)rarity * 10), 20 + ((int)rarity * 10));
-
-        Player.Stats playerStat = Player.Stats.CooldownReduction; // just initialize it to any of the stats, this will be modified when running through the switch statement
-        switch (itemSlot)
-        {
-            case InventorySystem.Slot.Helmet: playerStat = Player.Stats.CooldownReduction; break;
-            case InventorySystem.Slot.Armor: playerStat = Player.Stats.Health; break;
-            case InventorySystem.Slot.Legs: playerStat = Player.Stats.Health; break;
-            case InventorySystem.Slot.Boots: playerStat = Player.Stats.MovementSpeed; break;
-            case InventorySystem.Slot.Weapon:
-                playerStat = Random.Range(0, 101) > 50 ? Player.Stats.Damage : Player.Stats.AttackSpeed;
-                break;
-        }
+        var rollableStats = ItemManager.Instance.rollableStats[itemSlot];
+        float rarityFraction = ((int)Rarity + 1) / 4f;
         
-        attributes.Add(playerStat, attributeValue);
+        int statsAmount = Mathf.FloorToInt(rollableStats.Count * rarityFraction);
+        statsAmount = statsAmount == 0 ? 1 : statsAmount; // make sure statsAmount is never 0, minimum stat is 1
+
+        int statsAssigned = 0;
+        while (statsAssigned < statsAmount)
+        {
+            int attributeValue = Random.Range(10 + (int)Rarity * 10, 20 + (int)Rarity * 10);
+            
+            Player.Stats playerStat = rollableStats[Random.Range(0, rollableStats.Count)];
+            
+            if (attributes.ContainsKey(playerStat))
+                continue;
+        
+            accumulatedAttribute += attributeValue;
+            
+            attributes.Add(playerStat, attributeValue);
+            
+            statsAssigned++;
+        }
     }
+
+    #region DEPRECATED SERIALIZATION
+    string SerializeToJson()
+    {
+        var serializedItem = new SerializableItem
+        { Name = Name,
+          Rarity = Rarity,
+          Attributes = attributes };
+
+        return JsonConvert.SerializeObject(serializedItem, Formatting.Indented);
+    }
+    
+#if UNITY_EDITOR
+    [Button] // debug button 
+#endif
+    public void SaveToJsonFile()
+    {
+        string json = SerializeToJson();
+        string timestamp = DateTime.Now.ToString("dddd-dd-MMMM @ HH.mm.ss");
+        
+        if (!Directory.Exists(Application.persistentDataPath + "/JSON")) Directory.CreateDirectory(Application.persistentDataPath + "/JSON");
+        File.WriteAllText(Application.persistentDataPath + $"/JSON/item_{timestamp}.json", json);
+    }
+
+    // Class for serialization
+    [Serializable]
+    class SerializableItem
+    {
+        public string Name;
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ItemManager.ItemRarity Rarity;
+        public Dictionary<Player.Stats, int> Attributes;
+    }
+    #endregion
 }

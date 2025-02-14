@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c13c81dba129b4a8d0255a5cf29dec, type: 3}
+  m_Name: Quest_2.3_enemy_2
+  m_EditorClassIdentifier: 
+  previousQuest: {fileID: 0}
+  nextQuest: {fileID: 11400000, guid: c04ede3059794ba45bf963d9ce124b96, type: 2}
+  questObjective:
+    objectiveName: Find a Way Forward
+    objectiveDescription: <color=red><itemC></color> enemies out of <color=red><itemT></color>
+      killed
+    requiredItems:
+    - item: {fileID: 11400000, guid: 4e0f14b55b88f3c45862c7292f919e8b, type: 2}
+      amount: 8

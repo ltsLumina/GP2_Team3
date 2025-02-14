@@ -11,14 +11,11 @@ public class InputActionRebinder : MonoBehaviour
     private InputAction action;
     private Button rebindButton;
 
-    private void Awake()
+    private void OnEnable()
     {
         rebindButton = GetComponentInChildren<Button>();
         rebindButton.onClick.AddListener(RebindAction);
-    }
 
-    private void OnEnable()
-    {
         action = InputSystem.actions.FindAction(actionReference.action.id);
 
         SetButtonText();

@@ -13,17 +13,20 @@ public class DEV_Ability_4 : Ability
     private void Awake()
     {
         // TODO: cannot get renderer on prefab
-        mat = damageWall.gameObject.GetComponent<Renderer>().material;
+
     }
 
     public override void Use()
     {
         Debug.Log($"{Name} used!");
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit) ? hit.point : ray.GetPoint(1000); // Fallback to a point far away if no hit
         GameObject wall = Instantiate( damageWall.gameObject, targetPoint, Quaternion.identity);
+        mat = wall.GetComponent<Renderer>().material;
         Projectile wallAbility = wall.GetComponent<Projectile>();
         wall.transform.forward = new Vector3(Player.transform.position.x, 0, Player.transform.position.z) - new Vector3(wall.transform.position.x, 0, wall.transform.position.z);
+        wall.transform.position = new Vector3(wall.transform.position.x, Player.transform.position.y, wall.transform.position.z);
 
         wallAbility.Initialize(damage);
         timer = duration;
@@ -34,12 +37,12 @@ public class DEV_Ability_4 : Ability
 
     private IEnumerator SpawnRingVisual(Material mat, Projectile damageWall)
     {
-        float vfxAmount = 0.4f;
+        float vfxAmount = 1f;
 
-        while (vfxAmount < 1)
+        while (vfxAmount > 0)
         {
-            vfxAmount += Time.deltaTime;
-            //mat.SetFloat("_Amount", vfxAmount);
+            vfxAmount -= Time.deltaTime;
+            mat.SetFloat("_Amount", vfxAmount);
             yield return null;
         }
 
@@ -55,12 +58,12 @@ public class DEV_Ability_4 : Ability
 
     private IEnumerator DeSpawnRingVisual(Material mat, Projectile damageWall)
     {
-        float vfxAmount = 1f;
+        float vfxAmount = 0f;
 
-        while (vfxAmount > 0.4)
+        while (vfxAmount < 1)
         {
-            vfxAmount -= Time.deltaTime;
-            //mat.SetFloat("_Amount", vfxAmount);
+            vfxAmount += Time.deltaTime;
+            mat.SetFloat("_Amount", vfxAmount);
             yield return null;
         }
 

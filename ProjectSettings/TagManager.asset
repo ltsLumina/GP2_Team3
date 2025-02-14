@@ -10,6 +10,9 @@ TagManager:
   - Item
   - Portal
   - Bullet
+  - BossSpawner
+  - BossHealth
+  - BossHealthFill
   layers:
   - Default
   - TransparentFX
@@ -19,8 +22,8 @@ TagManager:
   - UI
   - Interactable
   - Enemy
-  - 
-  - 
+  - Ability
+  - Player
   - 
   - 
   - 

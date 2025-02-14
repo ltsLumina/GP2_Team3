@@ -42,8 +42,22 @@ public class ItemDropper : MonoBehaviour
             ItemManager.Instance.itemNames.TryGetValue(itemSlot, out string itemName);
             
             Item droppedItem = ItemManager.Instance.CreateItem(itemSlot, itemName);
+
+            Vector3 position = transform.position;
             
-            droppedItem.transform.position = enemy.transform.position;
+            Collider[] hits = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Interactable"));
+            foreach (Collider hit in hits)
+            {
+                if (hit.TryGetComponent(out Item _))
+                {
+                    position.x += 1f;
+                    position.z += 1f;
+                    break;
+                }
+            }
+            
+            position.y = 0.35f;
+            droppedItem.transform.position = position;
         }
     }
 }

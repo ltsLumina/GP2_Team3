@@ -13,5 +13,15 @@ MonoBehaviour:
   m_Name: Left Click
   m_EditorClassIdentifier: 
   abilityName: Left Click
-  icon: {fileID: 21300000, guid: 8170b8926d0f1a245b162a8e0ddf49d3, type: 3}
-  cooldown: 0.35
+  icon: {fileID: 21300000, guid: 714ef4f2021013f4289c6e7b005a0ff4, type: 3}
+  cooldown: 0.4
+  manaCost: 10
+  cameraShake: 0
+  duration: 0.1
+  strength: 0.025
+  vibrato: 0
+  randomness: 0
+  damage: 25
+  timeToDestroy: 0.35
+  bullet: {fileID: 4220826865429717794, guid: df8c47c216de15646942851bbc8c7901, type: 3}
+  speed: 17

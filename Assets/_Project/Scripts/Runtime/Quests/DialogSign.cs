@@ -10,7 +10,7 @@ public class DialogSign : DialogSource, IInteractable
     private void Awake()
     {
         outline = GetComponent<Outline>();
-        outline.enabled = false;
+        outline.enabled = true;
     }
 
     private void RequestDialog()
@@ -20,6 +20,6 @@ public class DialogSign : DialogSource, IInteractable
     }
 
     public void OnInteract() => RequestDialog();
-    public void OnHoverEnter() => outline.enabled = true;
-    public void OnHoverExit() => outline.enabled = false;
+    public void OnHoverEnter() { }
+    public void OnHoverExit() { }
 }

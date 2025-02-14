@@ -1,51 +1,52 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [System.Serializable]
-public class QuestObjective
+public abstract class QuestObjective
 {
     [SerializeField] private string objectiveName;
     [SerializeField, TextArea(2, 3), Tooltip("\"<itemC>\" will display amount of items collected\n \"<itemT>\" will display total amount of items needed")]
     private string objectiveDescription;
 
-    [SerializeField] private QuestItemSO[] requiredItems;
+    [SerializeField] private bool giveLevelOnComplete;
 
-    private int itemsCollected;
-    private bool isComplete;
+    protected bool isStarted;
+    protected bool isComplete;
 
+    protected int currentProgress;
+    protected int totalProgress;
+
+    public bool IsStarted => isStarted;
     public bool IsComplete => isComplete;
-    public string ObjectiveName => objectiveName;
-    public string ObjectiveDescription
+    public string ObjectiveName => string.IsNullOrEmpty(objectiveName) ? "WHY NO NAME, HUH??" : objectiveName;
+    public bool GiveLevelOnComplete => giveLevelOnComplete;
+
+    public virtual string ObjectiveDescription
     {
         get
         {
             string description = objectiveDescription;
-            description = description.Replace("<itemT>", requiredItems.Length.ToString());
-            description = description.Replace("<itemC>", itemsCollected.ToString());
+            description = description.Replace("<itemT>", totalProgress.ToString());
+            description = description.Replace("<itemC>", currentProgress.ToString());
             return description;
         }
     }
 
-
-    public void CheckStatus()
+    public virtual void StartObjective()
     {
-        bool isComplete = true;
-        foreach (QuestItemSO item in requiredItems)
-        {
-            if (!QuestObjectiveManager.Instance.HasItem(item))
-            {
-                isComplete = false;
-            }
-            else
-            {
-                itemsCollected++;
-            }
-        }
-        this.isComplete = isComplete;
+        isStarted = true;
+        CheckStatus();
+
+        Debug.Log("QUEST OBJECTIVE STARTED: " + ObjectiveName + " /type:" + this.GetType().ToString());
     }
 
-    public void ResetObjective()
+    public abstract void CheckStatus();
+
+    public virtual void ResetObjective()
     {
-        itemsCollected = 0;
+        totalProgress = 0;
+        currentProgress = 0;
+        isStarted = false;
         isComplete = false;
     }
 }

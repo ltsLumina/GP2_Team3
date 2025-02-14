@@ -8,6 +8,7 @@ public class DialogData
     [TextArea(2, 4)]
     [SerializeField] private string content;
     [SerializeField] private DialogType dialogType;
+    [SerializeField] private float bubbleDuration = 3f;
 
     [Header("Text Settings")]
     [SerializeField] private TMP_FontAsset font;
@@ -19,6 +20,7 @@ public class DialogData
     public string Title => title;
     public string Content => content;
     public DialogType DialogType => dialogType;
+    public float BubbleDuration => bubbleDuration;
 
     public TMP_FontAsset Font => font;
     public Color TextColor => textColor;
@@ -26,11 +28,12 @@ public class DialogData
     public TextAlignmentOptions TextAlignment => textAlignment;
     public float FontSize => Mathf.Abs(fontSize);
 
-    public DialogData(string title, string content, DialogType dialogType)
+    public DialogData(string title, string content, DialogType dialogType, float bubbleDuration = 3f)
     {
         this.title = title;
         this.content = content;
         this.dialogType = dialogType;
+        this.bubbleDuration = bubbleDuration;
         this.textColor = Color.white;
         this.fontStyle = FontStyles.Normal;
         this.textAlignment = TextAlignmentOptions.Midline;

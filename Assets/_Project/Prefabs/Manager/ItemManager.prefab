@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1955721918847273553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4143894180633799527}
+  - component: {fileID: 8401014201644789222}
+  m_Layer: 0
+  m_Name: ItemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4143894180633799527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955721918847273553}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.870779, y: -0.25655484, z: 1.4670527}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8401014201644789222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955721918847273553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f589490db5b464cb8452e09257b3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemNames:
+    serializedKvps: []
+    dividerPos: 0.33
+  itemSprites:
+    serializedKvps:
+    - Key: 1
+      Value:
+        serializedKvps:
+        - Key: 0
+          Value: {fileID: 21300000, guid: 8ee8541c520014040b69d4e21b9db5a6, type: 3}
+          index: 0
+          isKeyRepeated: 0
+        - Key: 1
+          Value: {fileID: 21300000, guid: 1488fa612c0de3a4f96f5e9f985e0558, type: 3}
+          index: 1
+          isKeyRepeated: 0
+        - Key: 2
+          Value: {fileID: 21300000, guid: c795492bb3a80084a8b70e30a1983f63, type: 3}
+          index: 2
+          isKeyRepeated: 0
+        - Key: 3
+          Value: {fileID: 21300000, guid: 2e44a58d01dc4e944ac7d1c57e1e0aa0, type: 3}
+          index: 3
+          isKeyRepeated: 0
+        dividerPos: 0.33
+      index: 0
+      isKeyRepeated: 0
+    - Key: 2
+      Value:
+        serializedKvps:
+        - Key: 0
+          Value: {fileID: 21300000, guid: 3f03550e03fe8a44aaecb554dad70482, type: 3}
+          index: 0
+          isKeyRepeated: 0
+        - Key: 1
+          Value: {fileID: 21300000, guid: e07565c810d83fc4e8f653f7254831d8, type: 3}
+          index: 1
+          isKeyRepeated: 0
+        - Key: 2
+          Value: {fileID: 21300000, guid: 201f4fbc69b242f449c3b941cf5f42e3, type: 3}
+          index: 2
+          isKeyRepeated: 0
+        - Key: 3
+          Value: {fileID: 21300000, guid: 1875ce4aa69da51499825734b386ef1a, type: 3}
+          index: 3
+          isKeyRepeated: 0
+        dividerPos: 0.33
+      index: 1
+      isKeyRepeated: 0
+    - Key: 4
+      Value:
+        serializedKvps:
+        - Key: 0
+          Value: {fileID: 21300000, guid: cbaef96e3285f2e4aae9a40edd80c5a5, type: 3}
+          index: 0
+          isKeyRepeated: 0
+        - Key: 1
+          Value: {fileID: 21300000, guid: 7d82a797cfd7f10408ce975c889a2935, type: 3}
+          index: 1
+          isKeyRepeated: 0
+        - Key: 2
+          Value: {fileID: 21300000, guid: 684c272ef96729742b1a54503a5b1d1d, type: 3}
+          index: 2
+          isKeyRepeated: 0
+        - Key: 3
+          Value: {fileID: 21300000, guid: ed43f79976cc50249904098af88b1f9c, type: 3}
+          index: 3
+          isKeyRepeated: 0
+        dividerPos: 0.33
+      index: 2
+      isKeyRepeated: 0
+    - Key: 3
+      Value:
+        serializedKvps:
+        - Key: 0
+          Value: {fileID: 21300000, guid: 68128a655036ec64fafd052a0134f7cf, type: 3}
+          index: 0
+          isKeyRepeated: 0
+        - Key: 1
+          Value: {fileID: 21300000, guid: 403a5f04147615e469eaff1819d2190e, type: 3}
+          index: 1
+          isKeyRepeated: 0
+        - Key: 2
+          Value: {fileID: 21300000, guid: 88d56df5624835c49a1225afe3db4ff0, type: 3}
+          index: 2
+          isKeyRepeated: 0
+        - Key: 3
+          Value: {fileID: 21300000, guid: ba2b318665f977347828ccbfc5fb5a18, type: 3}
+          index: 3
+          isKeyRepeated: 0
+        dividerPos: 0.33
+      index: 3
+      isKeyRepeated: 0
+    - Key: 5
+      Value:
+        serializedKvps:
+        - Key: 0
+          Value: {fileID: 21300000, guid: 96a79f35987804b4fbd971e6e717c61d, type: 3}
+          index: 0
+          isKeyRepeated: 0
+        - Key: 1
+          Value: {fileID: 21300000, guid: 2f26a75f74792f042b9c08fe169c0cbb, type: 3}
+          index: 1
+          isKeyRepeated: 0
+        - Key: 2
+          Value: {fileID: 21300000, guid: ffa45f558875f5b4c8766d4a28227889, type: 3}
+          index: 2
+          isKeyRepeated: 0
+        - Key: 3
+          Value: {fileID: 21300000, guid: 46b107a8bfb80d04da08659857c3e84a, type: 3}
+          index: 3
+          isKeyRepeated: 0
+        dividerPos: 0.33
+      index: 4
+      isKeyRepeated: 0
+    dividerPos: 0.33449438

@@ -1,44 +1,96 @@
-using DG.Tweening;
 using UnityEngine;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(Outline))]
+[RequireComponent(typeof(Outline), typeof(NavMeshObstacle))]
 public class Door : MonoBehaviour, IQuestTarget, IInteractable
 {
-    [SerializeField] private string questTargetName = "Door";
-    [SerializeField] private QuestSO questObjective;
+    [Header("Quest Settings")]
+    [SerializeField] private QuestSO quest;
+    [SerializeField] private bool startQuestOnInteract = false;
 
-    [SerializeField] private GameObject[] doorParts;
+    [Header("Audio")]
+    [SerializeField] FMODUnity.EventReference doorOpeningSFX;
 
     private Outline outline;
+    private NavMeshObstacle navObstacle;
+    private Animator animator;
 
-    public string TargetName => questTargetName;
-    public QuestObjective QuestObjective => questObjective.Objective;
+    private bool isLocked;
+
+    public QuestSO Quest => quest;
 
     private void Awake()
     {
         outline = GetComponent<Outline>();
         outline.enabled = false;
+
+        navObstacle = GetComponent<NavMeshObstacle>();
+        navObstacle.enabled = true;
+
+        animator = GetComponentInChildren<Animator>();
+
+        GetComponentInChildren<BoxCollider>().isTrigger = false;
     }
 
     public void OnInteract()
     {
-        if(!QuestObjective.IsComplete)
+        if (Quest != null)
         {
-            Debug.Log("Door is locked");
+            if (!Quest.Objective.IsStarted && startQuestOnInteract)
+                QuestObjectiveManager.Instance.StartQuest(Quest);
+
+            if (!Quest.Objective.IsComplete)
+            {
+                Debug.Log("Door is locked");
+                return;
+            }
+
+            //Debug.Log("Door is unlocked");
+            //QuestObjectiveManager.Instance.EndQuest(Quest);
+        }
+
+        bool wasOpen = animator.GetBool("Open");
+
+        SetOpen(!wasOpen);
+    }
+
+    public void SetOpen(bool isOpen)
+    {
+        if (isLocked)
             return;
-        }
 
-        foreach (var doorPart in doorParts)
+        navObstacle.enabled = !isOpen;
+        GetComponentInChildren<BoxCollider>().isTrigger = isOpen;
+        animator.SetBool("Open", isOpen);
+
+        FMODUnity.RuntimeManager.PlayOneShotAttached(doorOpeningSFX, gameObject);
+
+    }
+
+    public void SetLocked(bool isLocked)
+    {
+        if (isLocked)
         {
-            doorPart.transform.DOMoveY(5, 5f);
+            navObstacle.enabled = true;
+            SetOpen(false);
         }
 
-        enabled = false;
+        this.isLocked = isLocked;
     }
 
     public void OnHoverEnter()
     {
-        var outlineColor = QuestObjective.IsComplete ? Color.white : Color.red;
+        Color outlineColor;
+
+        if (Quest == null)
+        {
+            outlineColor = Color.white;
+        }
+        else
+        {
+            outlineColor = Quest.Objective.IsComplete ? Color.white : Color.red;
+        }
+
         outline.OutlineColor = outlineColor;
         outline.enabled = true;
     }
@@ -46,5 +98,10 @@ public class Door : MonoBehaviour, IQuestTarget, IInteractable
     public void OnHoverExit()
     {
         outline.enabled = false;
+    }
+
+    public bool IsOpen
+    {
+        get => GetComponent<Animator>().GetBool("Open");
     }
 }

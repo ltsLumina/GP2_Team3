@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67381d67ee0ffbb4495c5032b0227307, type: 3}
+  m_Name: 1_ResearchLog_Popup_DONTUSE
+  m_EditorClassIdentifier: 
+  dialogData:
+    title: Research Log
+    content: "The Daggerblade's design is centred around crystalline materials harvested
+      from this planet, which shows incredible results for energy resonance. By utilizing
+      these energies through a molecular-disruption field, the blade can theoretically
+      cut through any known material. However, despite its potential, the weapon
+      remains in an experimental phase. We should test its limits more extensively,
+      but prolonged duration of this expedition has left our team exhausted, and
+      resources are running very low. Right now, I can see that it\u2019s a marvel
+      of engineering, but also I can\u2019t help but feel uneasy. We\u2019ve created
+      something extraordinary, but we're not aware of its costs."
+    dialogType: 0
+    bubbleDuration: 3
+    font: {fileID: 11400000, guid: 176ed31151628e04f8d5c1bc098557a5, type: 2}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    fontStyle: 0
+    textAlignment: 257
+    fontSize: 36

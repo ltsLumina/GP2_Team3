@@ -1,21 +1,29 @@
 using UnityEngine;
+using VInspector;
 
 public class CamFollow : MonoBehaviour
 {
-    private Vector3 m_offset;
-    [SerializeField] private Transform m_Player;
-    [SerializeField] private float m_cameraSmoothness;
+    [SerializeField] private Transform player;
+    [SerializeField] private float cameraSmoothness;
+    [SerializeField] private Vector3 offset;
+    
     private Vector3 _currentVelocity = Vector3.zero;
 
     private void Start()
     {
-        m_offset = transform.position - m_Player.position;
+        transform.position = player.position + offset;
     }
 
     private void LateUpdate()
     {
-        Vector3 targetposition = m_Player.position + m_offset;
-        transform.position = Vector3.SmoothDamp(transform.position, targetposition, ref _currentVelocity, m_cameraSmoothness);
+        Vector3 targetposition = player.position + offset;
+        transform.position = Vector3.SmoothDamp(transform.position, targetposition, ref _currentVelocity, cameraSmoothness);
+    }
+
+    [Button]
+    void SetOffset()
+    {
+        offset = transform.position - player.position;
     }
 
 }

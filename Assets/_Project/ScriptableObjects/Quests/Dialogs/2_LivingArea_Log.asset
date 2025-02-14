@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67381d67ee0ffbb4495c5032b0227307, type: 3}
+  m_Name: 2_LivingArea_Log
+  m_EditorClassIdentifier: 
+  dialogData:
+    title: Desperate Message
+    content: "\u201CWe\u2019ve sealed the Dining Area to keep them out. If anyone
+      finds this, I hope you can make it. We didn't deserve any of this. We warned
+      the authorities as soon as we noticed the contamination, yet they insisted
+      on staying. This is not an accident; this is a murder!\u201D"
+    dialogType: 0
+    bubbleDuration: 3
+    font: {fileID: 11400000, guid: 176ed31151628e04f8d5c1bc098557a5, type: 2}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    fontStyle: 0
+    textAlignment: 257
+    fontSize: 36

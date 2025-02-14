@@ -10,18 +10,20 @@ public class ControlsRemapping : MonoBehaviour
 {
     private static string FilePath => Application.persistentDataPath + "/controlsOverrides.dat";
 
-    private static InputActionMap gameActionMap;
     private static Dictionary<string, string> overridesDictionary = new();
     public static ReadOnlyDictionary<string, string> OverridesDictionary => new(overridesDictionary);
 
     public static event Action<InputAction> OnSuccessfulRebinding;
 
-    private void Awake()
+    private static InputActionMap _gameActionMap;
+    public static InputActionMap GameActionMap
     {
-        gameActionMap = InputSystem.actions.FindActionMap("Player");
+        get
+        {
+            _gameActionMap ??= InputSystem.actions.FindActionMap("Player");
 
-        //if (File.Exists(FilePath))
-        //    LoadControlOverrides();
+            return _gameActionMap;
+        }
     }
 
     public static void RemapKeyboardAction(InputAction actionToRebind, int targetBinding)
@@ -37,9 +39,7 @@ public class ControlsRemapping : MonoBehaviour
             {
                 operation.Dispose();
                 AddOverrideToDictionary(actionToRebind.id, actionToRebind.bindings[targetBinding].effectivePath, targetBinding);
-                
-                //SaveControlOverrides();
-                
+
                 actionToRebind.Enable();
                 OnSuccessfulRebinding?.Invoke(actionToRebind);
             })
@@ -59,9 +59,7 @@ public class ControlsRemapping : MonoBehaviour
             {
                 operation.Dispose();
                 AddOverrideToDictionary(actionToRebind.id, actionToRebind.bindings[targetBinding].effectivePath, targetBinding);
-                
-                //SaveControlOverrides();
-                
+
                 actionToRebind.Enable();
                 OnSuccessfulRebinding?.Invoke(actionToRebind);
             })
@@ -108,9 +106,9 @@ public class ControlsRemapping : MonoBehaviour
             return;
         }
 
-        foreach(var item in overridesDictionary)
+        foreach (var item in overridesDictionary)
         {
-            if(item.Value == null)
+            if (item.Value == null)
             {
                 overridesDictionary.Remove(item.Key);
             }
@@ -121,7 +119,14 @@ public class ControlsRemapping : MonoBehaviour
             string[] split = item.Key.Split(new string[] { " : " }, StringSplitOptions.None);
             Guid id = Guid.Parse(split[0]);
             int index = int.Parse(split[1]);
-            gameActionMap.asset.FindAction(id).ApplyBindingOverride(index, item.Value);
+            GameActionMap.asset.FindAction(id).ApplyBindingOverride(index, item.Value);
         }
+    }
+
+    public static void ResetControlOverrides()
+    {
+        overridesDictionary.Clear();
+        GameActionMap.RemoveAllBindingOverrides();
+        SaveControlOverrides();
     }
 }

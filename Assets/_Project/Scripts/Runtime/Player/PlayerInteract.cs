@@ -1,84 +1,89 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInteract : MonoBehaviour
 {
     [SerializeField] private LayerMask interactableLayer;
-    [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float interactableDistance = 5f;
-    [SerializeField] private float enemyInteractableDistance = 10f;
 
-    private HashSet<IInteractable> previousInteractableObjects = new();
-    private HashSet<IInteractable> previousEnemyObjects = new();
+    private IInteractable currentInteractable;
+
+    public static event Action<IInteractable, GameObject> OnHoverEnter;
+    public static event Action<IInteractable> OnHoverExit;
+
+    private InputAction interactAction;
+
+    private void OnEnable()
+    {
+        PlayerInput input = FindAnyObjectByType<PlayerInput>();
+        if (!input)
+        {
+            enabled = false;
+            return;
+        }
+
+        interactAction = input.actions["Interact"];
+        interactAction.performed += InteractPerformed;
+    }
+
+    private void OnDisable()
+    {
+        interactAction.performed -= InteractPerformed;
+
+        OnHoverEnter = null;
+        OnHoverExit = null;
+    }
+
+    private void InteractPerformed(InputAction.CallbackContext context)
+    {
+        currentInteractable?.OnInteract();
+    }
 
     private void Update()
     {
         SearchInteractableObjects();
-        SearchEnemyObjects();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, interactableLayer))
-            {
-                if (hit.collider.TryGetComponent<IInteractable>(out var interactable) && previousInteractableObjects.Contains(interactable))
-                {
-                    interactable.OnInteract();
-                }
-            }
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, enemyLayer))
-            {
-                if (hit.collider.TryGetComponent<IInteractable>(out var enemy) && previousEnemyObjects.Contains(enemy))
-                {
-                    enemy.OnInteract();
-                }
-            }
-        }
     }
 
     private void SearchInteractableObjects()
     {
-        foreach (var interactable in previousInteractableObjects)
-        {
-            interactable.OnHoverExit();
-        }
+        IInteractable closest = null;
+        GameObject closestObject = null;
+        float closestDistance = float.MaxValue;
 
-        var interactableObjects = new HashSet<IInteractable>();
         var colliders = Physics.OverlapSphere(transform.position, interactableDistance, interactableLayer);
-
         foreach (var collider in colliders)
         {
             if (collider.TryGetComponent<IInteractable>(out var interactable))
             {
-                interactableObjects.Add(interactable);
-                interactable.OnHoverEnter();
+                float distance = Vector3.Distance(transform.position, collider.transform.position);
+                if (distance < closestDistance)
+                {
+                    if(interactable is Door) { }
+                        distance -= 1f;
+
+                    closestDistance = distance;
+                    closest = interactable;
+                    closestObject = collider.gameObject;
+                }
             }
         }
 
-        previousInteractableObjects = interactableObjects;
-    }
-
-    private void SearchEnemyObjects()
-    {
-        foreach (var enemy in previousEnemyObjects)
+        if (currentInteractable != closest)
         {
-            enemy.OnHoverExit();
-        }
-
-        var enemyObjects = new HashSet<IInteractable>();
-        var colliders = Physics.OverlapSphere(transform.position, enemyInteractableDistance, enemyLayer);
-
-        foreach (var collider in colliders)
-        {
-            if (collider.TryGetComponent<IInteractable>(out var enemy))
+            if (currentInteractable != null)
             {
-                enemyObjects.Add(enemy);
-                enemy.OnHoverEnter();
+                OnHoverExit?.Invoke(currentInteractable);
+                currentInteractable.OnHoverExit();
+            }
+
+            currentInteractable = closest;
+
+            if (currentInteractable != null)
+            {
+                OnHoverEnter?.Invoke(currentInteractable, closestObject);
+                currentInteractable.OnHoverEnter();
             }
         }
-
-        previousEnemyObjects = enemyObjects;
     }
 }

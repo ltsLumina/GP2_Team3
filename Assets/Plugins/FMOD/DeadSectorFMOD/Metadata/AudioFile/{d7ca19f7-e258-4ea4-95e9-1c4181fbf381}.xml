@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{d7ca19f7-e258-4ea4-95e9-1c4181fbf381}">
+		<property name="assetPath">
+			<value>LucianBullet.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>8.1600208333333342</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{4b3748bf-cc14-4a69-bded-52a55d2f68e2}</destination>
+		</relationship>
+	</object>
+</objects>

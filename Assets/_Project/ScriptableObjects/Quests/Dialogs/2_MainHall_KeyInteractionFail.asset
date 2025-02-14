@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67381d67ee0ffbb4495c5032b0227307, type: 3}
+  m_Name: 2_MainHall_KeyInteractionFail
+  m_EditorClassIdentifier: 
+  dialogData:
+    title: 
+    content: "\rIt's locked. I got to find someone from the crew for the key.\r"
+    dialogType: 1
+    bubbleDuration: 3
+    font: {fileID: 11400000, guid: 176ed31151628e04f8d5c1bc098557a5, type: 2}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    fontStyle: 0
+    textAlignment: 257
+    fontSize: 36

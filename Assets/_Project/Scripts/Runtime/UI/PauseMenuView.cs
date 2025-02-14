@@ -10,7 +10,11 @@ public class PauseMenuView : MenuView
 
     public override void Initialize()
     {
-        resumeButton.onClick.AddListener(() => MenuViewManager.HideCurrent());
+        resumeButton.onClick.AddListener(() =>
+        {
+            MenuViewManager.HideCurrent();
+            GameManager.Instance.SwitchState<PlayingState>();
+        });
         settingsButton.onClick.AddListener(() => MenuViewManager.Show<SettingsMenuView>());
         quitButton.onClick.AddListener(() => SceneLoader.Instance.LoadScene((int)SceneIndexes.MAIN_MENU));
     }

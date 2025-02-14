@@ -18,8 +18,8 @@ public class QuestObjectiveManager : MonoBehaviour
         }
     }
 
-    private static IQuestItemGiver[] _questItemGivers;
-    public static IQuestItemGiver[] QuestItemGivers
+    private IQuestItemGiver[] _questItemGivers;
+    public IQuestItemGiver[] QuestItemGivers
     {
         get
         {
@@ -31,12 +31,18 @@ public class QuestObjectiveManager : MonoBehaviour
         }
     }
 
+    [Header("Quests")]
+    [SerializeField] private QuestSO startQuest;
     [SerializeField] private List<QuestSO> quests;
 
     private QuestSO currentQuest;
-    private HashSet<QuestItemSO> collectedItems = new();
+    private Dictionary<string, int> collectedItems = new();
+
+    public QuestSO CurrentQuest => currentQuest;
 
     public event Action<QuestObjective> OnObjectiveUpdated;
+    public event Action<QuestSO> OnQuestStarted;
+    public event Action<QuestSO> OnQuestCompleted;
 
     private void OnEnable()
     {
@@ -57,37 +63,130 @@ public class QuestObjectiveManager : MonoBehaviour
 
         foreach (QuestSO quest in quests)
         {
-            quest.Objective.ResetObjective();
+            if (quest != null)
+                quest.Objective.ResetObjective();
+            else
+                Debug.LogError("Quest is null!", this);
         }
     }
 
     private void Start()
     {
-        currentQuest = quests[0];
-        OnObjectiveUpdated?.Invoke(currentQuest.Objective);
+        OnObjectiveUpdated?.Invoke(null);
+        StartQuest(startQuest);
     }
 
     private void AddObjectiveItem(QuestItemSO objective)
     {
-        collectedItems.Add(objective);
+        if (!collectedItems.ContainsKey(objective.ItemID))
+            collectedItems.Add(objective.ItemID, 1);
+        else
+            collectedItems[objective.ItemID]++;
+
+        if (currentQuest == null)
+            return;
+
         currentQuest.Objective.CheckStatus();
+        OnObjectiveUpdated?.Invoke(currentQuest.Objective);
 
-        if (currentQuest.Objective.IsComplete)
+        foreach(var quest in quests)
         {
-            int currentIndex = quests.IndexOf(currentQuest);
+            if (quest.Objective == currentQuest.Objective)
+                continue;
+            quest.Objective.CheckStatus();
+        }
+    }
 
-            if (currentIndex + 1 < quests.Count)
-            {
-                currentQuest = quests[currentIndex + 1];
-            }
+    public void StartQuest(QuestSO quest)
+    {
+        if (quest == null)
+            return;
+
+        if(quest.PreviousQuest != null && !quest.PreviousQuest.Objective.IsComplete)
+        {
+            Debug.LogWarning("Cannot start quest. Previous quest not completed.");
+            return;
         }
 
+        if (quest == null)
+        {
+            if (currentQuest != null)
+            {
+                currentQuest = null;
+                OnObjectiveUpdated?.Invoke(null);
+            }
+            return;
+        }
+
+        if (currentQuest != null && (!currentQuest.Objective.IsComplete || quest.Objective.IsStarted))
+            return;
+
+        currentQuest = quest;
+        currentQuest.Objective.StartObjective();
+        OnObjectiveUpdated?.Invoke(currentQuest.Objective);
+
+        currentQuest.Objective.CheckStatus();
+        OnQuestStarted?.Invoke(currentQuest);
+    }
+
+
+    public bool EndQuest(QuestSO quest)
+    {
+        if (currentQuest != quest)
+            return false;
+        if (!currentQuest.Objective.IsComplete)
+            return false;
+
+        OnQuestCompleted?.Invoke(quest);
+        StartQuest(currentQuest.NextQuest);
+
+        Experience.GainLevel();
+        return true;
+    }
+
+    public bool EndQuest(QuestObjective quest)
+    {
+        if (currentQuest.Objective != quest)
+            return false;
+        if (!currentQuest.Objective.IsComplete)
+            return false;
+
+        OnQuestCompleted?.Invoke(currentQuest);
+        StartQuest(currentQuest.NextQuest);
+
+        Experience.GainLevel();
+        return true;
+    }
+
+    public bool HasItem(QuestItemSO objective, out int itemCount)
+    {
+        if (collectedItems.ContainsKey(objective.ItemID))
+        {
+            itemCount = collectedItems[objective.ItemID];
+            return true;
+        }
+        itemCount = 0;
+        return false;
+    }
+
+    public void UpdateCurrentQuest()
+    {
+        currentQuest.Objective.CheckStatus();
         OnObjectiveUpdated?.Invoke(currentQuest.Objective);
     }
 
+//#if UNITY_EDITOR
 
-    public bool HasItem(QuestItemSO objective)
-    {
-        return collectedItems.Contains(objective);
-    }
+//    private void OnValidate()
+//    {
+//        if (quests == null || quests.Count <= 0)
+//            return;
+
+//        if (UnityEngine.Application.isPlaying)
+//            return;
+
+//        quests = quests.OrderBy(quest => quest.name).ToList();
+//    }
+
+//#endif
 }

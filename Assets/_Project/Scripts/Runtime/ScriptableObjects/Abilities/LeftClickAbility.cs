@@ -1,4 +1,5 @@
 ﻿#region
+using DG.Tweening;
 using UnityEngine;
 #endregion
 
@@ -6,7 +7,10 @@ using UnityEngine;
 public class LeftClickAbility : Ability
 {
     [SerializeField] int damage = 10;
-    
+    [SerializeField] float timeToDestroy = 2;
+    [SerializeField] Projectile bullet;
+    [SerializeField] float speed;
+
     /// <summary>
     /// Left and Right Click abilities need additional logic to work properly.
     /// <para>A check must be performed to determine if the cursor is over a UI element.</para>
@@ -16,22 +20,38 @@ public class LeftClickAbility : Ability
     {
         Debug.Log($"{Name} used!");
         
-            // TODO: probably redo this logic to use the IInteractable interface, but I was having issues before.
-             // Needs to have a range check.
-             
-        // check for enemy under cursor
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        LayerMask enemyLayer = LayerMask.GetMask("Enemy");
-
-        if (Physics.Raycast(ray, out var hit, Mathf.Infinity, enemyLayer))
-        {
-            if (hit.collider.TryGetComponent(out Enemy enemy))
-            {
-                float distance = 5;
-                if (Vector3.Distance(Player.transform.position, enemy.transform.position) > distance) return;
-                
-                enemy.TakeDamage(damage);
-            }
-        }
+        Player.Animator.SetTrigger("shoot");
+        Action();
     }
+
+    Ray ray;
+    RaycastHit hit;
+    
+    void Action()
+    {
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            hit.collider.TryGetComponent(out Enemy _);
+            
+#if UNITY_EDITOR
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green, 2.5f);
+#endif
+        }
+
+        var shootChild = GameObject.Find("ShootChild").transform;
+        Projectile bulletObj = Instantiate(bullet, shootChild.position, Quaternion.identity);
+
+        bulletObj.Initialize(damage, Player, ManaCost, timeToDestroy);
+
+        Vector3 shootDirection = (new Vector3(hit.point.x, 0, hit.point.z) - Player.transform.position).normalized;
+
+        var rb = bulletObj.GetComponent<Rigidbody>();
+
+        // Calculate the direction towards the mouse position
+        rb.linearVelocity = shootDirection * speed;
+
+        Camera.main.DOShakePosition(duration, strength, vibrato, randomness, false, ShakeRandomnessMode.Harmonic);
+    }
+
 }

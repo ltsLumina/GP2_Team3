@@ -42,7 +42,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _LimitDeltaTime: 0.11744547
+    - _LimitDeltaTime: 0.7159333
     - _Pixels: 24.2
     - _QueueControl: 0
     - _QueueOffset: 0

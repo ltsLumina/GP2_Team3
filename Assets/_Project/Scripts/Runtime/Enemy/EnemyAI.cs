@@ -39,19 +39,33 @@ public class EnemyAI : MonoBehaviour
 
     readonly static int Offset = Animator.StringToHash("Offset");
     readonly static int Multiplier = Animator.StringToHash("Multiplier");
-    
+
+    Enemy enemy;
     NavMeshAgent agent;
     Animator anim;
     Transform target;
 
-    #region API
-    public void SetTarget(Transform newTarget) => target = newTarget;
-    #endregion
-
     void Awake()
     {
+        enemy = GetComponent<Enemy>();
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
+    }
+    
+    void OnEnable()
+    {
+        Health.OnDeath += OnPlayerDeath;
+        target = FindFirstObjectByType<Player>().transform;
+    }
+
+    void OnDisable() => Health.OnDeath -= OnPlayerDeath;
+
+    void OnPlayerDeath()
+    {
+        agent.ResetPath();
+        
+        StopAllCoroutines();
+        wanderCoroutine = StartCoroutine(Wander());
     }
 
     // target is by default the player, but it could be changed if we want
@@ -76,8 +90,22 @@ public class EnemyAI : MonoBehaviour
     Coroutine wanderCoroutine;
     float chaseTimer; // how long the enemy has been chasing the player
     
-    void Update()
+    bool playerIsDead => FindAnyObjectByType<Health>().CurrentHealth <= 0;
+
+    public void UpdateAI()
     {
+        if (agent) agent.isStopped = GameManager.Instance.CurrentState is PauseState;
+        
+        if (enemy.IsDead)
+        {
+            StopAllCoroutines();
+            wanderCoroutine = null;
+            return;
+        }
+        
+        if (!enabled) return;
+        if (playerIsDead) return;
+        
         switch (brain)
         {
             case Brain.Humanoid:
@@ -107,22 +135,21 @@ public class EnemyAI : MonoBehaviour
                 // If the player is within the enemy's detection range, the enemy will move towards the player
                 if (distance <= detectionRange)
                 {
-                    if (wanderCoroutine != null)
+                    if (NearTarget && HasLineOfSight) Engage(attributes);
+                    else if (HasLineOfSight)
                     {
-                        StopCoroutine(wanderCoroutine);
-                        wanderCoroutine = null;
+                        Chase();
+                        
+                        if (chaseTimer > 0) Engage(attributes);
+                        else wanderCoroutine ??= StartCoroutine(Wander());
                     }
-
-                    Engage(attributes);
+                    else wanderCoroutine ??= StartCoroutine(Wander());
                 }
+
                 // Keep chasing after the player has left the detection range
                 else if (chaseTimer > 0) Engage(attributes);
-                // If the player is outside the enemy's detection range and not chasing, the enemy will wander aimlessly
-                else
-                {
-                    // If the player is outside the enemy's detection range and not chasing, the enemy will wander aimlessly
-                    wanderCoroutine ??= StartCoroutine(Wander());
-                }
+                else wanderCoroutine ??= StartCoroutine(Wander());
+
                 break;
 
             case Brain.MiniBoss:
@@ -147,12 +174,20 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    bool isAttacking;
+
     void Engage((float speed, float rotationSpeed, float acceleration, float stoppingDistance) attributes)
     {
         var path = new NavMeshPath();
-        agent.CalculatePath(target.position, path);
-        agent.path = path;
-        
+
+        if (agent.CalculatePath(target.position, path) && path.status == NavMeshPathStatus.PathComplete) { agent.SetPath(path); }
+        else if (agent.pathStatus == NavMeshPathStatus.PathPartial)
+        {
+            Debug.LogWarning("Path is partial! \nPlayer is either behind a closed door or out of bounds.");
+            agent.ResetPath();
+            wanderCoroutine = StartCoroutine(Wander());
+        }
+
         agent.speed = attributes.speed;
         agent.angularSpeed = attributes.rotationSpeed;
         agent.acceleration = attributes.acceleration;
@@ -167,10 +202,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         // check if player is within attack range
-        if (nearTarget)
-        {
-            Attack();
-        }
+        if (NearTarget) Attack();
         else
         {
             attackCoroutine = null; // Can't attack while chasing.
@@ -180,30 +212,104 @@ public class EnemyAI : MonoBehaviour
     
     Coroutine attackCoroutine;
 
+    [SerializeField] ParticleSystem slashVFX;
+    
+    bool enteredComabt => attackCoroutine != null;
+    
     void Attack()
     {
-        //anim.SetTrigger("Attack");
+        if (isAttacking) return;
+
+        isAttacking = true;
+
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+
         attackCoroutine ??= StartCoroutine(Cooldown());
+
+        if (enteredComabt)
+        {
+            MenuView currentDialogue = MenuViewManager.GetCurrentView();
+            if (currentDialogue) MenuViewManager.HideView(currentDialogue);
+        }
+    }
+
+    void Update()
+    {
+        // animation was making the enemy wonky and sometimes would moonwalk.
+        // super ugly fix but it works.
+        
+        if (enemy.isBoss) return;
+        
+        // keep all transform values at zero
+        Transform child = transform.GetChild(0);
+        child.localPosition = Vector3.zero;
+        child.localRotation = Quaternion.identity;
+        child.localScale = Vector3.one;
     }
 
     IEnumerator Cooldown()
     {
         yield return new WaitForSeconds(attackCooldown);
+
+        // double check if the player is still within attack range
+        if (!NearTarget)
+        {
+            isAttacking = false;
+            yield break;
+        }
+
+        anim.SetTrigger("slash");
+
+        yield return new WaitForSeconds(0.4f);
+        
+        var slash = Instantiate(slashVFX, transform.position + new Vector3(0, 0.75f, 0), Quaternion.identity);
+        slash.transform.forward = target.position - transform.position;
+        slash.transform.rotation = Quaternion.Euler(-90, slash.transform.rotation.eulerAngles.y, -90);
+        
+        slash.Play();
+
+        yield return new WaitForSeconds(0.25f);
         
         target.TryGetComponent(out Player player);
         player.TakeDamage(damage);
-        
+
+        isAttacking = false;
         attackCoroutine = null;
     }
 
-    bool nearTarget => agent.remainingDistance <= agent.stoppingDistance && Vector3.Distance(target.position, transform.position) <= attackRange;
-    
+    public bool NearTarget
+    {
+        get
+        {
+            if (!agent || !target || !gameObject.activeSelf || !enabled) return false;
+            return agent.remainingDistance <= agent.stoppingDistance && Vector3.Distance(target.position, transform.position) <= attackRange;
+        }
+    }
+
+    public bool HasLineOfSight
+    {
+        get
+        {
+            if (Physics.Raycast(transform.position + new Vector3(0, 0.75f, 0), target.position - transform.position + new Vector3(0, 0.75f, 0), out RaycastHit hit, Mathf.Infinity))
+            {
+                // if the ray hits a player and does not hit a wall or a closed door, return true
+                if (hit.transform.CompareTag("Player") && !hit.transform.name.ToLower().Contains("wall") && !(hit.transform.TryGetComponent(out Door door) && !door.IsOpen)) return true;
+            }
+
+            return false;
+        }
+    }
+
     void Chase()
     {
         chaseTimer += Time.deltaTime;
         //Debug.Log($"Chasing player! | {chaseTimer.RoundToInt()}s elapsed.");
         
-        if (chaseTimer >= chaseDuration && !nearTarget)
+        if (chaseTimer >= chaseDuration && !NearTarget)
         {
             chaseTimer = 0;
             agent.ResetPath();
@@ -215,7 +321,8 @@ public class EnemyAI : MonoBehaviour
     {
         while (true)
         {
-            Vector3 randomPosition = RandomNavSphere(transform.position, distance, -1);
+            float randDist = Random.Range(attackRange, detectionRange);
+            Vector3 randomPosition = RandomNavSphere(transform.position, randDist, -1);
             agent.stoppingDistance = 0;
             agent.SetDestination(randomPosition);
             yield return new WaitForSeconds(delayBetweenMoves);
@@ -226,6 +333,9 @@ public class EnemyAI : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = NearTarget ? Color.green : Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
     #region Utility

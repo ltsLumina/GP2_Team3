@@ -13,5 +13,27 @@ MonoBehaviour:
   m_Name: Right Click
   m_EditorClassIdentifier: 
   abilityName: Right Click
-  icon: {fileID: 21300000, guid: 571049d54947d5b4da205e17f01ad4d9, type: 3}
-  cooldown: 5
+  icon: {fileID: 21300000, guid: c278ed23c26797d45987fb706e5f9d95, type: 3}
+  cooldown: 1.25
+  manaCost: -15
+  damage: 25
+  effect: {fileID: 5162910912013668194, guid: cf82839c411151342a7b2337bda9fb34, type: 3}
+  burstDelay: 0.25
+  burstDamage: 2
+  range: 4
+  angle: 90
+  slashSFX:
+    Guid:
+      Data1: 209215477
+      Data2: 1242824911
+      Data3: 381181860
+      Data4: -1013792197
+    Path: event:/Player/RightClickSlash
+  bombSFX:
+    Guid:
+      Data1: -99439777
+      Data2: 1264211169
+      Data3: 1947263406
+      Data4: 207611061
+    Path: event:/Player/RightClickBomb
+  pulseWave: {fileID: 7514737209909906081, guid: d6178f513b2dd8347a8fab8993cc2248, type: 3}

@@ -8,12 +8,15 @@ public class DialogBubble : MenuView
     [SerializeField] private TMP_Text contentText;
     [SerializeField] private float yOffset = 0f;
 
+    [SerializeField] private FMODUnity.EventReference textTypedSFX;
+
     private TextTyper contentTyper;
     private Transform playerTransform;
 
     public override void Initialize()
     {
         contentTyper = new TextTyper(contentText);
+        contentTyper.OnTextChanged += () => FMODUnity.RuntimeManager.PlayOneShot(textTypedSFX);
     }
 
     public override void Show()
@@ -33,9 +36,21 @@ public class DialogBubble : MenuView
 
     private void Update()
     {
-        var playerScreenPos = Camera.main.WorldToScreenPoint(playerTransform.position);
-        transform.position = new(playerScreenPos.x, playerScreenPos.y + yOffset);
+        RectTransform rectTransform = transform as RectTransform;
+        var canvas = GetComponentInParent<Canvas>();
+
+        if (playerTransform == null || canvas == null || rectTransform == null)
+            return;
+
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, playerTransform.position);
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.transform as RectTransform, screenPoint, canvas.worldCamera, out Vector2 localPoint))
+        {
+            rectTransform.localPosition = new Vector3(localPoint.x, localPoint.y + yOffset, 0);
+        }
     }
+
 
     public Awaitable SetData(DialogData dialogData)
     {

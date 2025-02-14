@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using VInspector;
 
@@ -11,16 +12,20 @@ public class ItemManager : MonoBehaviour
     // if we want multiple items we can store a list of item names per slot rather than just 1 string
     public SerializedDictionary<InventorySystem.Slot, string> itemNames = new();
     
+    public SerializedDictionary<InventorySystem.Slot, SerializedDictionary<ItemRarity, Sprite>> itemSprites = new();
+    
     private SerializedDictionary<Int64, Item> items = new();
 
     public enum ItemRarity
     {
-        Common = 0,     // 45%
-        Uncommon,   // 30%
+        Common = 0,     // 47.5%
+        Uncommon,   // 35%
         Rare,       // 15%
-        Epic,       // 7.5%
         Legendary   // 2.5%
     }
+    
+    // dictionary of what item can roll what stats
+    public Dictionary<InventorySystem.Slot, List<Player.Stats>> rollableStats = new();
     
     private void Awake()
     {
@@ -32,9 +37,24 @@ public class ItemManager : MonoBehaviour
         // populate itemNames with the different names
         itemNames.Add(InventorySystem.Slot.Helmet, "Helmet");
         itemNames.Add(InventorySystem.Slot.Armor, "Armor");
-        itemNames.Add(InventorySystem.Slot.Legs, "Legs");
+        itemNames.Add(InventorySystem.Slot.Pants, "Pants");
         itemNames.Add(InventorySystem.Slot.Boots, "Boots");
         itemNames.Add(InventorySystem.Slot.Weapon, "Weapon");
+        
+        // populate rollableStats dictionary
+        rollableStats.Add(InventorySystem.Slot.Helmet, new List<Player.Stats> { Player.Stats.Damage, Player.Stats.CooldownReduction,
+                                                                                Player.Stats.Health, Player.Stats.Mana });
+        
+        rollableStats.Add(InventorySystem.Slot.Armor, new List<Player.Stats>  { Player.Stats.Damage, Player.Stats.Health,
+                                                                                Player.Stats.Mana });
+        
+        rollableStats.Add(InventorySystem.Slot.Pants, new List<Player.Stats>  { Player.Stats.Damage, Player.Stats.Health,
+                                                                                Player.Stats.Mana });
+        
+        rollableStats.Add(InventorySystem.Slot.Boots, new List<Player.Stats>  { Player.Stats.Damage, Player.Stats.Health,
+                                                                                Player.Stats.Mana, Player.Stats.MovementSpeed });
+        
+        rollableStats.Add(InventorySystem.Slot.Weapon, new List<Player.Stats> { Player.Stats.Damage, Player.Stats.CooldownReduction });
     }
     
     public Item CreateItem(InventorySystem.Slot itemSlot, string itemName)

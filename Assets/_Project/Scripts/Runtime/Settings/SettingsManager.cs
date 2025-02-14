@@ -6,8 +6,9 @@ using UnityEngine;
 public static class SettingsManager
 {
     private static string FilePath => $"{Application.persistentDataPath}/settings.json";
-
     private static Dictionary<string, string> _settings;
+
+    public static event Action OnLoadSettings;
 
     static SettingsManager()
     {
@@ -25,6 +26,17 @@ public static class SettingsManager
 
         Debug.LogWarning($"Setting with key {key} not found");
         return default;
+    }
+
+    public static T GetSetting<T>(string key, T defaultValue)
+    {
+        if (_settings == null) LoadSettings();
+        if (_settings.TryGetValue(key, out string jsonValue))
+        {
+            return JsonConvert.DeserializeObject<T>(jsonValue);
+        }
+        SetSetting(key, defaultValue);
+        return defaultValue;
     }
 
     public static void SetSetting(string key, object value, bool saveImmediately = false)
@@ -81,6 +93,8 @@ public static class SettingsManager
         {
             Debug.LogError($"Failed to load control overrides: {ex.Message}");
         }
+
+        OnLoadSettings?.Invoke();
     }
 
     public static void SaveSettings()
@@ -94,5 +108,12 @@ public static class SettingsManager
         {
             Debug.LogError($"Failed to save settings: {ex.Message}");
         }
+    }
+
+    public static void ResetSettings()
+    {
+        _settings = new Dictionary<string, string>();
+        SaveSettings();
+        LoadSettings();
     }
 }

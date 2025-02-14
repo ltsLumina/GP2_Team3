@@ -31,13 +31,13 @@ namespace NoSlimes
 
         private void Start()
         {
-            loadingScreen = GetComponentInChildren<LoadingScreen>();
+            loadingScreen = GetComponentInChildren<LoadingScreen>(true);
             cancellationToken = destroyCancellationToken;
+        }
 
-            if(SceneManager.GetActiveScene().buildIndex == (int)SceneIndexes.MANAGER)
-            {
-                LoadScene((int)SceneIndexes.MAIN_MENU);
-            }
+        public void ReloadScene()
+        {
+            SceneLoader.Instance.ReloadScene();
         }
 
         public async void LoadScene(int sceneBuildIndex, LoadSceneMode loadSceneMode = LoadSceneMode.Single)

@@ -1,39 +1,63 @@
 #region
 using UnityEngine;
 using UnityEngine.InputSystem;
-using VInspector;
 #endregion
 
+[RequireComponent(typeof(PlayerInput))]
 public class InputManager : MonoBehaviour
 {
-    [Tooltip("Key is a string input key, as defined in the Input Actions. \nE.g. '1', 'j', 'k', 'l', etc.")]
-    [SerializeField] SerializedDictionary<string, GameObject> hotbarSlots;
+    GameObject abilitiesHeader;
+    
+    public Vector2 MoveInput {get; private set;}
+    public bool IsMoving => MoveInput != Vector2.zero;
 
-    public Vector2 MoveInput { get; private set; }
+    Player player;
 
-    #region API
-    public bool IsMoving { get; set; }
-    #endregion
+    void Awake() => player = GetComponentInParent<Player>();
+
+    void Start()
+    {
+        if (!abilitiesHeader) abilitiesHeader = GameObject.Find("Ability Buttons");
+    }
+    
+    bool pressedJ;
+
+    void Update()
+    {
+        
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            pressedJ = true;
+            
+            if (Input.GetKeyDown(KeyCode.O) && pressedJ)
+            {
+                pressedJ = false;
+                Animator anim = player.Animator;
+                anim.SetBool("funny", !anim.GetBool("funny"));
+            }
+        }
+    }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         MoveInput = context.ReadValue<Vector2>();
-        IsMoving = MoveInput != Vector2.zero;
     }
 
     public void OnDash(InputAction.CallbackContext context)
     {
+        if (!enabled) return;
         if (!context.performed) return;
         
-        var dashController = GetComponentInParent<DashController>();
-        dashController.Dash();
+        player.DashController.Dash();
     }
 
     public void Ability(InputAction.CallbackContext context)
     {
+        if (!enabled) return;
         if (!context.performed) return;
-        
-        string key = context.control.name;
-        if (hotbarSlots.TryGetValue(key, out GameObject button)) button.GetComponent<HotbarSlot>().OnSlotClicked();
+
+        // use the ability based on the index
+        int index = context.action.GetBindingIndexForControl(context.control);
+        abilitiesHeader.transform.GetChild(index).GetComponent<HotbarSlot>().OnSlotClicked();
     }
 }

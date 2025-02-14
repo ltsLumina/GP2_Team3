@@ -1,7 +1,7 @@
 using NoSlimes.Loggers;
 using System;
 
-public class DialogSource : LoggerMonoBehaviour
+public abstract class DialogSource : LoggerMonoBehaviour
 {
     public static event Action<DialogData> OnDialogRequested;
 

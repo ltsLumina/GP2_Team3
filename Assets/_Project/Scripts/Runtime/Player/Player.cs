@@ -15,14 +15,11 @@ public class Player : MonoBehaviour, IDamageable
     public enum Stats
     {
         Health,
+        Mana,
         Damage,
-        AttackSpeed,
         CooldownReduction,
         MovementSpeed
     }
-    
-    Health health;
-    readonly Dictionary<Stats, int> playerStats = new();
 
     #region unused
 #pragma warning disable 0067
@@ -32,32 +29,55 @@ public class Player : MonoBehaviour, IDamageable
     public event Action OnDeath;
 #pragma warning restore 0414
     #endregion
-    
+
+    public Health Health { get; private set; }
+    public Mana Mana { get; private set; }
+    public DashController DashController { get; private set; }
+
     public float CurrentHealth
     {
-        get => health.CurrentHealth;
-        set => health.CurrentHealth = value;
+        get => Health.CurrentHealth;
+        set => Health.CurrentHealth = value;
     }
     public float MaxHealth
     {
-        get => health.MaxHealth;
-        set => health.MaxHealth = value;
+        get => Health.MaxHealth;
+        set => Health.MaxHealth = value;
     }
+
+    public bool IsDead => CurrentHealth <= 0;
+
+    readonly Dictionary<Stats, int> playerStats = new ();
+    public Animator Animator { get; private set; }
+
+    /// <summary>
+    ///    Indexer for the player's stats. This allows us to access the player's stats easier.
+    /// <example> player[Stats.Health] returns the stat as a percentage. </example>
+    /// </summary>
+    /// <param name="stat"></param>
+    public float this[Stats stat] => playerStats[stat] / 100f;
     
     public IReadOnlyDictionary<Stats, int> PlayerStats => playerStats; // changelog: changed from get-method to property (this comment can be removed after reading)
-    
-    public void TakeDamage(int damage) => health.TakeDamage(damage);
+
+    public void TakeDamage(int damage) => Health.TakeDamage(damage);
+
+    void Awake()
+    {
+        DashController = GetComponent<DashController>();
+        Animator = GetComponent<Animator>();
+    }
 
     void Start()
     {
-        health = FindAnyObjectByType<Health>();
+        Health = FindAnyObjectByType<Health>();
+        Mana = FindAnyObjectByType<Mana>();
 
         // set default stat values, all stats are in percentages (%)
         // 100 means 100% of the damage dealt. This allows for modifiers to decrease 1 stat and increase another
         // 101% means more than default 100% damage... I think you get what I mean at this point
         playerStats.Add(Stats.Health, 100);
+        playerStats.Add(Stats.Mana, 100);
         playerStats.Add(Stats.Damage, 100);
-        playerStats.Add(Stats.AttackSpeed, 100);
         playerStats.Add(Stats.CooldownReduction, 100);
         playerStats.Add(Stats.MovementSpeed, 100);
     }

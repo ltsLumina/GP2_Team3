@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c13c81dba129b4a8d0255a5cf29dec, type: 3}
+  m_Name: Quest_2.4_abilityunlock
+  m_EditorClassIdentifier: 
+  previousQuest: {fileID: 11400000, guid: fbe13a422023a314a9287fd175a32d46, type: 2}
+  nextQuest: {fileID: 11400000, guid: e76740ddd4f5e2a4f9e2fe798c5b9c12, type: 2}
+  questObjective:
+    objectiveName: Find a Way Forward
+    objectiveDescription: The Main Hall door is locked. Search the area for a key.
+    giveLevelOnComplete: 1
+    requiredItems:
+    - item: {fileID: 11400000, guid: 6b6cc550db982504e9fe0a925c173c7d, type: 2}
+      amount: 1

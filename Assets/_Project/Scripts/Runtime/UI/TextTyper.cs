@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class TextTyper
     private string message;
     private float letterPause;
     private CancellationTokenSource cancellationTokenSource;
+
+    public event Action OnTextChanged;
 
     public TextTyper(TMP_Text textComponent)
     {
@@ -60,6 +63,7 @@ public class TextTyper
             }
 
             textComponent.text += letter;
+            OnTextChanged?.Invoke();
             await Awaitable.WaitForSecondsAsync(letterPause);
         }
     }

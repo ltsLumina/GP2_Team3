@@ -1,22 +1,23 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
 using Random = UnityEngine.Random;
 
 public class EnemySpawnPoint : MonoBehaviour
 {
     [SerializeField]
-    private int minAmount;
+    private int minAmount = 0;
     [SerializeField]
-    private int maxAmount;
+    private int maxAmount = 0;
     [SerializeField]
     private float spawnDelay = 0f;
     [SerializeField]
     private int spawnCharges = 0;
     [SerializeField]
     private float spawnRadius = 0f;
+    [SerializeField]
+    private bool isBossSpawner = false;
+    [SerializeField]
+    private EnemyManager.EnemyType enemyType = EnemyManager.EnemyType.Chaser;
     
     private float lastSpawnTime = 0f;
     private int chargesLeft = 0;
@@ -31,7 +32,18 @@ public class EnemySpawnPoint : MonoBehaviour
 
     private void Awake()
     {
-        chargesLeft = spawnCharges;
+        // run preset settings for boss spawner
+        if (isBossSpawner)
+        {
+            spawnCharges = 1;
+            chargesLeft = spawnCharges;
+            spawnDelay = 0f;
+            minAmount = 1;
+            maxAmount = 1;
+        }
+        else
+            chargesLeft = spawnCharges;
+        
         cachedTransform = GetComponent<Transform>(); // cache transform since this does an external c++ call
     }
 
@@ -39,16 +51,22 @@ public class EnemySpawnPoint : MonoBehaviour
     {
         isActive = true;
         chargesLeft = spawnCharges;
+        shouldSpawn = false;
+        lastSpawnTime = 0f;
+        spawnPoints.Clear();
     }
 
     public void UpdateSpawnPoint()
     {
-        if (shouldSpawn)
-            if (Time.time - lastSpawnTime > spawnDelay && chargesLeft > 0)
-                SpawnEnemies();
+        if (isActive)
+        {
+            if (shouldSpawn)
+                if (Time.time - lastSpawnTime > spawnDelay && chargesLeft > 0)
+                    SpawnEnemies();
 
-        if (chargesLeft <= 0)
-            isActive = false;
+            if (shouldSpawn && chargesLeft <= 0)
+                isActive = false;
+        }
     }
 
     private Vector3 generateNewSpawnPoint()
@@ -66,10 +84,14 @@ public class EnemySpawnPoint : MonoBehaviour
 
     public void SpawnEnemies()
     {
-        int enemyAmount = Random.Range(minAmount, maxAmount);
+        int enemyAmount = Random.Range(minAmount, maxAmount + 1); // make maxAmount inclusive by going + 1
         for (int i = 0; i < enemyAmount; i++)
         {
-            Vector3 spawnPosition = generateNewSpawnPoint();
+            // unreadable code but I love ternary operators 
+            Vector3 spawnPosition = isBossSpawner ?
+                                    new Vector3(cachedTransform.position.x + (spawnRadius / 2), cachedTransform.position.y, cachedTransform.position.z + (spawnRadius / 2))
+                                    :
+                                    generateNewSpawnPoint();
 
             if (spawnPoints.Count > 0)
             {
@@ -86,7 +108,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 }
             }
 
-            EnemyManager.Instance.SpawnEnemy(spawnPosition);
+            EnemyManager.Instance.SpawnEnemy(spawnPosition, isBossSpawner, enemyType);
         }
 
         lastSpawnTime = Time.time;

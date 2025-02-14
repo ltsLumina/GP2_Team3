@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Tips
   m_EditorClassIdentifier: 
   gameTips:
-  - Hi ;)
-  - This is tip (don't ask me why it exists, I just ported this from my previous
-    project)
+  - Attack enemies to kill them
+  - You can rebind keys in settings
+  - Isak says to not forget your abilities
+  - Don't die
+  - Don't question the weapon in first quest :)

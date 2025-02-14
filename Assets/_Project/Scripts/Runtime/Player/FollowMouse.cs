@@ -1,9 +1,7 @@
 using UnityEngine;
 
-
 public class FollowMouse : MonoBehaviour
 {
-    [SerializeField] private LayerMask groundMask;
     private Camera mainCamera;
 
     private void Start()
@@ -11,37 +9,27 @@ public class FollowMouse : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    private void Update()
+    public void UpdateFollow()
     {
-        Aim();
+        if (GameManager.Instance.Player.Health.IsDead) return;
+
+        Vector3 playerScreenPosition = mainCamera.WorldToScreenPoint(transform.position);
+        Vector3 rotation = Input.mousePosition - playerScreenPosition;
+        float lookAngle = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+        lookAngle -= 45;
+        transform.rotation = Quaternion.Euler(0, -lookAngle, 0);
     }
 
-
-    private void Aim()
+#if false
+    private void OnGUI()
     {
-        var (success, position) = GetMousePosition();
-        if (success)
-        {
-            var direction = position - transform.position;
+        GUI.Label(new Rect(10, 10, 300, 20), $"Mouse Position: {Input.mousePosition}");
+        GUI.Label(new Rect(10, 50, 300, 20), $"Player Position: {transform.position}");
+        GUI.Label(new Rect(10, 30, 300, 20), $"Screen Player Position: {mainCamera.WorldToScreenPoint(transform.position)}");
 
-            direction.y = 0;
-
-            transform.forward = direction;
-        }
+        GUI.Label(new Rect(10, 70, 300, 20), $"MainCameras: {GameObject.FindGameObjectsWithTag("MainCamera").Length}");
+        GUI.Label(new Rect(10, 90, 300, 20), $"Cameras: {FindObjectsByType<Camera>(FindObjectsSortMode.None).Length}");
+        //GUI.Label(new Rect(10, 50, 100, 20), $"Rotation: {}");
     }
-
-    private (bool success, Vector3 position) GetMousePosition()
-    {
-        var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, groundMask))
-        {
-            return (success: true, position: hitInfo.point);
-        }
-
-
-        return (success: false, position: Vector3.zero);
-
-    }
-
+#endif
 }

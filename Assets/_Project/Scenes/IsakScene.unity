@@ -616,6 +616,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6664192120651813883, guid: 3351c836ede1731458a1d32a25c3bbdc, type: 3}
+      propertyPath: dashSpeed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664192120651813883, guid: 3351c836ede1731458a1d32a25c3bbdc, type: 3}
+      propertyPath: dashDuration
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8646630180472489258, guid: 3351c836ede1731458a1d32a25c3bbdc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
