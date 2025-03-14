@@ -16,11 +16,11 @@ MonoBehaviour:
   nextQuest: {fileID: 0}
   questObjective:
     objectiveName: Secure Access to the Offices
-    objectiveDescription: <color=red><itemC></color> enemies out of <color=red><itemT></color>
+    objectiveDescription: <color=red><itemC_0></color> enemies out of <color=red><itemT_0></color>
       killed
     giveLevelOnComplete: 1
     requiredItems:
     - item: {fileID: 11400000, guid: 04eebe04a0f744344bca4da7f97490be, type: 2}
-      amount: 0
+      amount: 4
     - item: {fileID: 11400000, guid: ce9fcea1cc5cb114ca04f9e3f64f6b7c, type: 2}
       amount: 1

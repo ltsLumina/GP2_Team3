@@ -51,7 +51,7 @@ public class LeftClickAbility : Ability
         // Calculate the direction towards the mouse position
         rb.linearVelocity = shootDirection * speed;
 
-        Camera.main.DOShakePosition(duration, strength, vibrato, randomness, false, ShakeRandomnessMode.Harmonic);
+        //Camera.main.DOShakePosition(duration, strength, vibrato, randomness, false, randomnessMode: ShakeRandomnessMode.Harmonic);
     }
 
 }

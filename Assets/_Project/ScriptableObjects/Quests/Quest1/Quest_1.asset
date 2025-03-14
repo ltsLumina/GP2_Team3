@@ -16,8 +16,7 @@ MonoBehaviour:
   nextQuest: {fileID: 0}
   questObjective:
     objectiveName: Escape the Labs
-    objectiveDescription: Find a way out of the labs. Grab the <color=yellow>weapon</color>
-      and interact with the <color=yellow>screen.</color>
+    objectiveDescription: 'Find a way out of the labs. '
     giveLevelOnComplete: 0
     requiredItems:
     - item: {fileID: 11400000, guid: eeb4907785a8e404ba23902831d0af36, type: 2}

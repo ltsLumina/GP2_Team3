@@ -28,6 +28,24 @@ public class ItemQuestObjective : QuestObjective
         }
     }
 
+    public override string ObjectiveDescription
+    {
+        get
+        {
+            string description = base.ObjectiveDescription;
+
+            for(int i = 0; i < requiredItems.Length; i++)
+            {
+                var item = requiredItems[i];
+
+                //description = description.Replace($"<itemT_{i}>", item.Amount.ToString());
+                description = description.Replace($"<itemC_{i}>", item.Amount.ToString());
+            }
+
+            return description;
+        }
+    }
+
     public override void CheckStatus()
     {
         int progress = 0;
@@ -70,9 +88,23 @@ public class ItemQuestObjective : QuestObjective
         QuestObjectiveManager.Instance.EndQuest(this);
     }
 
-    public void SetRequiredItems(ItemQuestData[] requiredItems)
+    public void UpdateRequiredItem(ItemQuestData item)
     {
-        this.requiredItems = requiredItems;
+        //this.requiredItems = item;
+        bool foundMatch = false;
+        foreach (var i in requiredItems)
+        {
+            if (i.Item == item.Item)
+            {
+                requiredItems[Array.IndexOf(requiredItems, i)] = item;
+                foundMatch = true;
+                break;
+            }
+        }
+
+        if(!foundMatch)
+            requiredItems = requiredItems.Append(item).ToArray();
+
         RecountTotalProgress();
     }
 }

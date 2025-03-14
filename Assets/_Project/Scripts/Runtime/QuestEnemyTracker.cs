@@ -31,7 +31,7 @@ public class QuestEnemyTracker : MonoBehaviour, IQuestItemGiver
 
         Debug.Log($"Enemies found: {enemyList.Count}");
 
-        quest.SetRequiredItems(new ItemQuestData[] { new(questItem, enemyList.Count) });
+        quest.UpdateRequiredItem(new ItemQuestData(questItem, enemyList.Count));
         QuestObjectiveManager.Instance.UpdateCurrentQuest();
 
         foreach (var enemy in enemyList)

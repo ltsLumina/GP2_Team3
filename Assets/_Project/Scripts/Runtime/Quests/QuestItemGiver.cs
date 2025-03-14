@@ -51,6 +51,12 @@ public class QuestItemGiver : MonoBehaviour, IInteractable, IQuestItemGiver
 
         FMODUnity.RuntimeManager.PlayOneShot(pickUpQuestItem);
 
+        if (gameObject.name == "Weapon")
+        {
+            var player = GameManager.Instance.Player;
+            player.GetComponent<HideWeaponOnStart>().ShowWeapon();
+        }
+
         enabled = false;
         if (removeVisualsOnQuestItemGiven)
             gameObject.SetActive(false);

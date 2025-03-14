@@ -72,6 +72,10 @@ public class QuestObjectiveUI : MonoBehaviour
         {
             ShowNextObjective();
         }
+        //else
+        //{
+        //    HideObjectivePanel();
+        //}
     }
 
     private async Awaitable ShowNewObjective(QuestObjective objective)

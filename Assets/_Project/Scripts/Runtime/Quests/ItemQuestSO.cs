@@ -6,8 +6,8 @@ public class ItemQuestSO : QuestSO
     [SerializeField] private ItemQuestObjective questObjective;
     public override QuestObjective Objective => questObjective;
 
-    public void SetRequiredItems(ItemQuestData[] requiredItems)
+    public void UpdateRequiredItem(ItemQuestData item)
     {
-        questObjective.SetRequiredItems(requiredItems);
+        questObjective.UpdateRequiredItem(item);
     }
 }

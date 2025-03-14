@@ -28,6 +28,7 @@ public abstract class QuestObjective
             string description = objectiveDescription;
             description = description.Replace("<itemT>", totalProgress.ToString());
             description = description.Replace("<itemC>", currentProgress.ToString());
+
             return description;
         }
     }

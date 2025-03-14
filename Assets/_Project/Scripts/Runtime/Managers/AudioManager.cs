@@ -31,15 +31,6 @@ public class AudioManager : SingletonPersistent<AudioManager>
         gamePlayMusicInstance = RuntimeManager.CreateInstance(gamePlayMusic);
         bossMusicInstance = RuntimeManager.CreateInstance(bossMusic);
         creditsMusicInstance = RuntimeManager.CreateInstance(creditsMusic);
-
-        SettingsManager.OnLoadSettings += UpdateSettings;
-    }
-
-    private void UpdateSettings()
-    {
-        RuntimeManager.GetVCA("vca:/MasterVCA").setVolume(SettingsManager.GetSetting<float>("MasterVol", 1));
-        RuntimeManager.GetVCA("vca:/MusicVCA").setVolume(SettingsManager.GetSetting<float>("MusicVol", 0.35f));
-        RuntimeManager.GetVCA("vca:/SFXVCA").setVolume(SettingsManager.GetSetting<float>("SFXVol", 0.75f));
     }
 
     private void OnEnable()
@@ -105,6 +96,10 @@ public class AudioManager : SingletonPersistent<AudioManager>
 
     public void PlayBossMusic()
     {
+        if (bossMusicPlaying)
+        {
+            return;
+        }
         menuMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         gamePlayMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         creditsMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

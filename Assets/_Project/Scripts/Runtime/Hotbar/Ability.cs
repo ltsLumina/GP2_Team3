@@ -1,6 +1,5 @@
 ﻿using Lumina.Essentials.Attributes;
 using UnityEngine;
-using VInspector;
 
 /// <summary>
 /// Generic ability data class.

@@ -71,6 +71,7 @@
 	<object class="GroupTrack" id="{e70c79cc-6971-446e-92bc-1dfdcb023946}">
 		<relationship name="modules">
 			<destination>{6a2bb676-d84e-4909-aeeb-3c55037347f3}</destination>
+			<destination>{f5ab93e8-fe7c-44f8-afab-096c8b97d482}</destination>
 		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{1db020e0-860e-458a-ac1a-356eed8c7349}</destination>
@@ -79,6 +80,7 @@
 	<object class="Timeline" id="{c6695360-a552-490c-a9de-c4449ca014cb}">
 		<relationship name="modules">
 			<destination>{6a2bb676-d84e-4909-aeeb-3c55037347f3}</destination>
+			<destination>{f5ab93e8-fe7c-44f8-afab-096c8b97d482}</destination>
 		</relationship>
 		<relationship name="markers">
 			<destination>{b81d0a8a-4aa2-4c2b-b622-22a326d58c89}</destination>
@@ -105,14 +107,31 @@
 	</object>
 	<object class="MixerBusPanner" id="{30437152-707d-47ca-a2bb-0a22cf7f337f}" />
 	<object class="SingleSound" id="{6a2bb676-d84e-4909-aeeb-3c55037347f3}">
+		<property name="start">
+			<value>9.948185941043084</value>
+		</property>
 		<property name="length">
 			<value>39.792743764172336</value>
+		</property>
+		<property name="volume">
+			<value>-2</value>
 		</property>
 		<relationship name="audioFile">
 			<destination>{0b99a202-da8b-4298-ae80-edc4b97ca58e}</destination>
 		</relationship>
 	</object>
+	<object class="SingleSound" id="{f5ab93e8-fe7c-44f8-afab-096c8b97d482}">
+		<property name="length">
+			<value>9.948185941043084</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{c8c90419-7a56-44ac-aa9d-93218139eb16}</destination>
+		</relationship>
+	</object>
 	<object class="EventMixerGroup" id="{1db020e0-860e-458a-ac1a-356eed8c7349}">
+		<property name="volume">
+			<value>-6</value>
+		</property>
 		<property name="name">
 			<value>Menu</value>
 		</property>
@@ -128,7 +147,7 @@
 	</object>
 	<object class="LoopRegion" id="{b81d0a8a-4aa2-4c2b-b622-22a326d58c89}">
 		<property name="position">
-			<value>0</value>
+			<value>9.948185941043084</value>
 		</property>
 		<property name="length">
 			<value>39.792743764172336</value>

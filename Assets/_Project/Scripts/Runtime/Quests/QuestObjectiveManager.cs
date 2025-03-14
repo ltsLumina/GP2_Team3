@@ -140,7 +140,9 @@ public class QuestObjectiveManager : MonoBehaviour
         OnQuestCompleted?.Invoke(quest);
         StartQuest(currentQuest.NextQuest);
 
-        Experience.GainLevel();
+        if (currentQuest.Objective.GiveLevelOnComplete)
+            Experience.GainLevel();
+
         return true;
     }
 
@@ -154,7 +156,9 @@ public class QuestObjectiveManager : MonoBehaviour
         OnQuestCompleted?.Invoke(currentQuest);
         StartQuest(currentQuest.NextQuest);
 
-        Experience.GainLevel();
+        if(currentQuest.Objective.GiveLevelOnComplete)
+            Experience.GainLevel();
+
         return true;
     }
 

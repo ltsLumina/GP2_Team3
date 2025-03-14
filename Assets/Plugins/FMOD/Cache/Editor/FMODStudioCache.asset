@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Assets/Plugins/FMOD/DeadSectorFMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638751403181002855
+  lastModified: 638775559455894514
   FileSizes:
   - Name: Desktop
     Value: 2056
@@ -737,7 +737,7 @@ MonoBehaviour:
   Path: Assets/Plugins/FMOD/DeadSectorFMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638751403181930020
+  lastModified: 638775559457217424
   FileSizes:
   - Name: Desktop
     Value: 2994112
@@ -809,7 +809,7 @@ MonoBehaviour:
   - {fileID: -8076103853208293526}
   StringsBanks:
   - {fileID: 8284143960594621983}
-  cacheTime: 638751403183550904
+  cacheTime: 638775559459080471
   cacheVersion: 131622
 --- !u!114 &1039890036116213418
 MonoBehaviour:
@@ -1123,7 +1123,7 @@ MonoBehaviour:
   Path: Assets/Plugins/FMOD/DeadSectorFMOD/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638751403183550904
+  lastModified: 638775559459080471
   FileSizes:
   - Name: Desktop
     Value: 4427808
@@ -1278,7 +1278,7 @@ MonoBehaviour:
   Path: Assets/Plugins/FMOD/DeadSectorFMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638751403181022924
+  lastModified: 638775559455918997
   FileSizes:
   - Name: Desktop
     Value: 3030
