@@ -46,7 +46,9 @@ public class Player : MonoBehaviour, IDamageable
     }
 
     public bool IsDead => CurrentHealth <= 0;
-
+    
+    public bool HasWeapon { get; set; }
+    
     readonly Dictionary<Stats, int> playerStats = new ();
     public Animator Animator { get; private set; }
 

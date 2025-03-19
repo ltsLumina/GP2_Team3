@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using FMODUnity;
 using NoSlimes.Loggers;
 using TMPro;
 using UnityEditor;
@@ -14,7 +15,7 @@ public class InventorySystem : LoggerMonoBehaviour
 {
     public static InventorySystem Instance { get; private set; }
 
-    [SerializeField] FMODUnity.EventReference pickUpItemSFX;
+    [SerializeField] EventReference pickUpItemSFX;
 
     public enum Slot
     {
@@ -44,6 +45,12 @@ public class InventorySystem : LoggerMonoBehaviour
             if (InventoryMenuView.Instance.gameObject.activeSelf) MenuViewManager.HideView(InventoryMenuView.Instance);
             else MenuViewManager.Show<InventoryMenuView>();
         }
+    }
+
+    public void OpenInventoryWithHotbarButton()
+    {
+        if (InventoryMenuView.Instance.gameObject.activeSelf) MenuViewManager.HideView(InventoryMenuView.Instance);
+        else MenuViewManager.Show<InventoryMenuView>();
     }
 
     public bool AddItemToInventory(Slot itemSlot, Item item)
@@ -91,7 +98,7 @@ public class InventorySystem : LoggerMonoBehaviour
 
     public bool ReplaceItemInInventory(Slot itemSlot, Item item)
     {
-        FMODUnity.RuntimeManager.PlayOneShot(pickUpItemSFX);
+        RuntimeManager.PlayOneShot(pickUpItemSFX);
         inventoryItems.TryGetValue(itemSlot, out Item itemInInventory);
         if (itemInInventory != null) RemoveItemFromInventory(itemSlot).transform.position = item.transform.position;
         return AddItemToInventory(itemSlot, item);

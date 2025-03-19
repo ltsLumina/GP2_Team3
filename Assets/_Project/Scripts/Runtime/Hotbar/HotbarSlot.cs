@@ -118,6 +118,8 @@ public class HotbarSlot : MonoBehaviour
 
     public void OnSlotClicked()
     {
+        if (!GameManager.Instance.Player.HasWeapon) return;
+        
         if (!unlocked || notEnoughMana) return;
 
         if (!ability || cooldown != null) return;

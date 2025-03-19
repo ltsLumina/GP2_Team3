@@ -48,7 +48,7 @@ Material:
     - _Add: 4.26
     - _Float: 640
     - _InMainMenu: 0
-    - _LimitDeltaTime: 0.9600766
+    - _LimitDeltaTime: 0.6325053
     - _Mult: 38.71
     - _Pixels: 800
     - _PosterizeHue: 1000

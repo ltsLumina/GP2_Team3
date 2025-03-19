@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c13c81dba129b4a8d0255a5cf29dec, type: 3}
   m_Name: Quest_2
   m_EditorClassIdentifier: 
-  previousQuest: {fileID: 11400000, guid: 7f86be7a25352ea428d915906752d49c, type: 2}
-  nextQuest: {fileID: 11400000, guid: 288e13d71d9da5f418e1b7f056d4d53e, type: 2}
+  previousQuest: {fileID: 0}
+  nextQuest: {fileID: 0}
   questObjective:
     objectiveName: Find a Way Forward
     objectiveDescription: The Main Hall door is locked. Search the area for a key.
-    giveLevelOnComplete: 0
+    giveLevelOnComplete: 1
     requiredItems:
     - item: {fileID: 11400000, guid: 6fa7cd10c1fba3e4580c6e644f5b73db, type: 2}
       amount: 1

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class HideWeaponOnStart : MonoBehaviour
@@ -8,6 +7,7 @@ public class HideWeaponOnStart : MonoBehaviour
     public void ShowWeapon()
     {
         weapon.SetActive(true);
+        GameManager.Instance.Player.HasWeapon = true;
         Destroy(this);
     }
     

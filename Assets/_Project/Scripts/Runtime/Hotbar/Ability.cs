@@ -11,14 +11,7 @@ public abstract class Ability : ScriptableObject
     [SerializeField] float cooldown;
     [Tooltip("A positive value will increase the mana amount. Vice versa, a negative value will decrease the mana amount." + "\nE.g. Use 10 to increase the mana by 10. Use -10 to decrease the mana by 10.")]
     [SerializeField] int manaCost;
-
-    [Space(10)]
-    [SerializeField] bool cameraShake;
-    [Header("Camera Shake")]
-    [SerializeField] protected float duration = 0.1f;
-    [SerializeField] protected float strength = 0.35f;
-    [SerializeField] protected int vibrato = 3;
-    [SerializeField] protected float randomness = 45;
+    
     [Space(10)]
     [Header("Misc")]
     [SerializeField, ReadOnly] bool ignore; 

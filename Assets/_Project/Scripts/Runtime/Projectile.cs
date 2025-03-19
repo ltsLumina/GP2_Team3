@@ -45,8 +45,9 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        if ((other.gameObject.name.ToLower().Contains("wall") || (other.TryGetComponent(out Door door) && !door.IsOpen)) && destroyOnWallHit) // Note: this was for a joke, we're not actually doing this lol
-        {
+        if ((other.gameObject.name.ToLower().Contains("wall") || (other.TryGetComponent(out Door door) && !door.IsOpen)) && destroyOnWallHit)
+        { // Note: this was for a joke, we're not actually doing this lol
+            // Update: we actually kept it in lol. it's terrible.
             Destroy(gameObject);
         }
     }

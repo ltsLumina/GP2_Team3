@@ -1,5 +1,4 @@
 ﻿#region
-using DG.Tweening;
 using UnityEngine;
 #endregion
 
@@ -18,6 +17,8 @@ public class LeftClickAbility : Ability
     /// </summary>
     public override void Use()
     {
+        if (!Player.HasWeapon) return;
+        
         Debug.Log($"{Name} used!");
         
         Player.Animator.SetTrigger("shoot");

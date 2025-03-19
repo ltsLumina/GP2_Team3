@@ -75,7 +75,7 @@ Material:
     - _Dissolve: 0
     - _ExecuteThreshhold: 0
     - _JitterResolution: 22.7
-    - _LimitDeltaTime: 0.6340716
+    - _LimitDeltaTime: 0.34211165
     - _Pixelation: 0
     - _Pixels: 0
     - _QueueControl: 0

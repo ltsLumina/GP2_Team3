@@ -67,7 +67,7 @@ Material:
     - _Float_1: 83
     - _Float_2: 0.45
     - _JitterResolution: 4.3
-    - _LimitDeltaTime: 0.33752662
+    - _LimitDeltaTime: 0.43890017
     - _QueueControl: 0
     - _QueueOffset: 0
     - _StaticJitterAmount: 54

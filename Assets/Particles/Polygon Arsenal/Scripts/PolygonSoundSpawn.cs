@@ -26,7 +26,7 @@ namespace PolygonArsenal
                 m_Sound.transform.SetParent(transform);
 
             //Multiply pitch
-            if (pitchRandomMultiplier != 1f)
+            if (pitchRandomMultiplier != 1)
             {
                 if (Random.value < .5)
                     m_Source.pitch *= Random.Range(1 / pitchRandomMultiplier, 1);

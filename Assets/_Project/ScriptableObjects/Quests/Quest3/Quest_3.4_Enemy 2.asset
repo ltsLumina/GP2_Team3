@@ -16,7 +16,7 @@ MonoBehaviour:
   nextQuest: {fileID: 0}
   questObjective:
     objectiveName: Secure Access to the Offices
-    objectiveDescription: <color=red><itemC_0></color> enemies out of <color=red><itemT_0></color>
+    objectiveDescription: <color=red><itemC></color> enemies out of <color=red><itemT></color>
       killed
     giveLevelOnComplete: 1
     requiredItems:

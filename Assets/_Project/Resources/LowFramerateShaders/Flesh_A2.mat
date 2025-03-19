@@ -128,7 +128,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _JitterResolution: 10
-    - _LimitDeltaTime: 0.9269078
+    - _LimitDeltaTime: 0.036288857
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005

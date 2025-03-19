@@ -1,4 +1,5 @@
 using System;
+using FMODUnity;
 using UnityEngine;
 
 [RequireComponent(typeof(Outline), typeof(Collider))]
@@ -10,7 +11,7 @@ public class QuestItemGiver : MonoBehaviour, IInteractable, IQuestItemGiver
     [SerializeField] private DialogDataSO dialogData;
 
     [Header("Audio")]
-    [SerializeField] private FMODUnity.EventReference pickUpQuestItem;
+    [SerializeField] private EventReference pickUpQuestItem;
 
     [Header("Visual")]
     [SerializeField] private float outlineWidth = 4f;
@@ -49,7 +50,7 @@ public class QuestItemGiver : MonoBehaviour, IInteractable, IQuestItemGiver
         if (dialogData)
             dialogData.Show();
 
-        FMODUnity.RuntimeManager.PlayOneShot(pickUpQuestItem);
+        RuntimeManager.PlayOneShot(pickUpQuestItem);
 
         if (gameObject.name == "Weapon")
         {
